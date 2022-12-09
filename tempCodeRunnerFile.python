@@ -1,8 +1,0 @@
-from datetime import datetime
-BASE_YEAR = 2000
-CURRENT_YEAR = datetime.now().year
-
-diff = (int(CURRENT_YEAR - BASE_YEAR)) if (CURRENT_YEAR - BASE_YEAR) else 1
-
-CHOICES = [(str(BASE_YEAR + i), str(BASE_YEAR + i)) for i in range(0, diff+1)]
-print(CHOICES)
