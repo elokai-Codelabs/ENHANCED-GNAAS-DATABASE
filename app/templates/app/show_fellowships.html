@@ -1,0 +1,246 @@
+{% extends 'app/base.html' %} {% load static %}
+<!--  -->
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">GNAAS FELLOWSHIPS</h5>
+          <div class="binary-container">
+            <!-- ASSETS>CSS>STYLE.CSS> -->
+            <div class="binary_content">
+              <span class="binary">Copy</span>
+              <span class="binary">Excel</span>
+              <span class="binary">CSV</span>
+              <span class="binary">PDF</span>
+              <span>
+                <a href="" class="btn btn-primary">
+                  <i class="bi bi-upload" style="font-size: 1.4rem"></i>&nbsp;
+                  Upload Fellowships
+                </a></span
+              >
+            </div>
+            <div class="binary_content">
+              <a href="{% url 'create-fellowship' %}" class="btn btn-secondary">
+                <i class="bi bi-align-center" style="font-size: 1.4rem"></i>Add
+                New Fellowship
+              </a>
+            </div>
+          </div>
+
+          <!-- Table with stripped rows -->
+          <table class="table datatable">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Location</th>
+                <th scope="col">Population</th>
+                <th scope="col">Zone</th>
+                <th scope="col">Union</th>
+                <th scope="col">President</th>
+                <th scope="col">Chaplain/Patron</th>
+
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if fellowships %}
+              <!--  -->
+              {% for fellowship in fellowships %}
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{fellowship.name}}</td>
+                <td>{{fellowship.location}}</td>
+                <td>{{fellowship.population}}</td>
+                <td>{{fellowship.zone}}</td>
+                <td>{{fellowship.union}}</td>
+                <td>{{fellowship.president}}</td>
+                <td>{{fellowship.chaplain_or_patron}}</td>
+
+                <td class="d-flex">
+                  <!-- ========================================= -->
+                  <!-- ===========VIEW MODAL FORM START-->
+                  <!-- ======================================== -->
+
+                  <!-- Basic Modal -->
+                  <button
+                    type="button"
+                    class="btn btn-success btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#basicModal{{fellowship.id}}"
+                  >
+                    <i class="bi bi-eye"></i> View
+                  </button>
+                  <div
+                    class="modal fade"
+                    id="basicModal{{fellowship.id}}"
+                    tabindex="-1"
+                  >
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">
+                            Viewing {{fellowship.name}}
+                          </h5>
+                          <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                          ></button>
+                        </div>
+                        <div class="modal-body">
+                          <p>
+                            <span style="font-weight: 900"> Name :</span
+                            >{{fellowship.name}}
+                          </p>
+
+                          <p>
+                            <span style="font-weight: 900">Location :</span
+                            >{{fellowship.location}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900">Population :</span
+                            >{{fellowship.population}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900">Zone :</span
+                            >{{fellowship.zone}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900">Union :</span
+                            >{{fellowship.union}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900">President :</span
+                            >{{fellowship.president}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900"
+                              >President Contact :</span
+                            >{{fellowship.president_contact}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900"
+                              >Chaplain/Patron :</span
+                            >{{fellowship.chaplain_or_patron}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900"
+                              >Chaplain/Patron Contact :</span
+                            >{{fellowship.chaplain_contact}}
+                          </p>
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Basic Modal-->
+
+                  <!-- ========================================= -->
+                  <!-- ===========VIEW MODAL FORM END-->
+                  <!-- ======================================== -->
+
+                  <a
+                    href="{% url 'edit-fellowship' fellowship.id %}"
+                    class="btn btn-outline-info btn-sm tex text-info mx-2"
+                    ><i class="bi bi-pencil"></i> Edit</a
+                  >
+
+                  <!-- delete button -->
+                  <!-- ===========delete MODAL FORM BUTTON-->
+                  <!-- ======================================== -->
+
+                  <button
+                    type="submit"
+                    class="btn btn-danger btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#delete{{fellowship.id}}"
+                  >
+                    <i class="bi bi-trash"></i> delete
+                  </button>
+                  <!-- ========================================= -->
+                  <!-- ===========DELETE MODAL FORM MODAL-->
+                  <!-- ======================================== -->
+                  <!-- Delete modal -->
+                  <div
+                    class="modal"
+                    id="delete{{fellowship.id}}"
+                    aria-labelledby="myModalLabel2"
+                    aria-hidden="true"
+                  >
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">
+                            You are about to delete a fellowship
+                          </h5>
+                          <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true"></span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>
+                            Are you sure you want to delete {{fellowship.name}}
+                          </p>
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                          >
+                            Cancel
+                          </button>
+                          <form
+                            action="{% url 'delete' fellowship.id %}"
+                            method="POST"
+                          >
+                            {% csrf_token %}
+                            <input
+                              type="submit"
+                              class="btn btn-danger"
+                              value="Delete"
+                            />
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- ========================================= -->
+                  <!-- ===========DELETE MODAL FORM END-->
+                  <!-- ======================================== -->
+                </td>
+              </tr>
+              {% endfor %}
+
+              <!--  -->
+              {%else %}
+              <h5 class="alert alert-primary ms-4 me-4">No student Records</h5>
+              {% endif%}
+            </tbody>
+          </table>
+          <!-- End Table with stripped rows -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

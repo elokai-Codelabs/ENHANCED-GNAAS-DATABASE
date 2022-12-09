@@ -1,0 +1,224 @@
+{% extends 'app/base.html' %} {% load static %}
+<!--  -->
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">GNAAS PATRONS</h5>
+          <div class="binary-container">
+            <!-- ASSETS>CSS>STYLE.CSS> -->
+            <div class="binary_content">
+              <span class="binary">Copy</span>
+              <span class="binary">Excel</span>
+              <span class="binary">CSV</span>
+              <span class="binary">PDF</span>
+              <span>
+                <a href="" class="btn btn-primary">
+                  <i class="bi bi-upload" style="font-size: 1.4rem"></i>&nbsp;
+                  Upload Patrons
+                </a></span
+              >
+            </div>
+            <div class="binary_content">
+              <a href="{% url 'create-patron' %}" class="btn btn-secondary">
+                <i class="bi bi-align-center" style="font-size: 1.4rem"></i>Add
+                New Patron
+              </a>
+            </div>
+          </div>
+
+          <!-- Table with stripped rows -->
+          <table class="table datatable">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Email</th>
+                <th scope="col">Fellowship</th>
+                <th scope="col">Zone</th>
+                <th scope="col">Union</th>
+
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if patrons %}
+              <!--  -->
+              {% for patron in patrons %}
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{patron.name}}</td>
+                <td>{{patron.phone}}</td>
+                <td>{{patron.email}}</td>
+                <td>{{patron.fellowship}}</td>
+                <td>{{patron.zone}}</td>
+                <td>{{patron.union}}</td>
+
+                <td class="d-flex">
+                  <!-- ========================================= -->
+                  <!-- ===========VIEW MODAL FORM START-->
+                  <!-- ======================================== -->
+
+                  <!-- Basic Modal -->
+                  <button
+                    type="button"
+                    class="btn btn-success btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#basicModal{{patron.id}}"
+                  >
+                    <i class="bi bi-eye"></i> View
+                  </button>
+                  <div
+                    class="modal fade"
+                    id="basicModal{{patron.id}}"
+                    tabindex="-1"
+                  >
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Viewing {{patron.name}}</h5>
+                          <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                          ></button>
+                        </div>
+                        <div class="modal-body">
+                          <p>
+                            <span style="font-weight: 900"> Name :</span
+                            >{{patron.name}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900">Phone:</span
+                            >{{patron.phone}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900">Email :</span
+                            >{{patron.email}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900">Fellowship :</span
+                            >{{patron.fellowship}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900">Zone :</span
+                            >{{patron.zone}}
+                          </p>
+                          <p>
+                            <span style="font-weight: 900">Union :</span
+                            >{{patron.union}}
+                          </p>
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Basic Modal-->
+
+                  <!-- ========================================= -->
+                  <!-- ===========VIEW MODAL FORM END-->
+                  <!-- ======================================== -->
+
+                  <a
+                    href="{% url 'edit-patron' patron.id %}"
+                    class="btn btn-outline-info btn-sm tex text-info mx-2"
+                    ><i class="bi bi-pencil"></i> Edit</a
+                  >
+
+                  <!-- delete button -->
+                  <!-- ===========delete MODAL FORM BUTTON-->
+                  <!-- ======================================== -->
+
+                  <button
+                    type="submit"
+                    class="btn btn-danger btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#delete{{patron.id}}"
+                  >
+                    <i class="bi bi-trash"></i> delete
+                  </button>
+                  <!-- ========================================= -->
+                  <!-- ===========DELETE MODAL FORM MODAL-->
+                  <!-- ======================================== -->
+                  <!-- Delete modal -->
+                  <div
+                    class="modal"
+                    id="delete{{patron.id}}"
+                    aria-labelledby="myModalLabel2"
+                    aria-hidden="true"
+                  >
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">
+                            You are about to delete a patron
+                          </h5>
+                          <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true"></span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Are you sure you want to delete {{patron.name}}</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                          >
+                            Cancel
+                          </button>
+                          <form
+                            action="{% url 'delete' patron.id %}"
+                            method="POST"
+                          >
+                            {% csrf_token %}
+                            <input
+                              type="submit"
+                              class="btn btn-danger"
+                              value="Delete"
+                            />
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- ========================================= -->
+                  <!-- ===========DELETE MODAL FORM END-->
+                  <!-- ======================================== -->
+                </td>
+              </tr>
+              {% endfor %}
+
+              <!--  -->
+              {%else %}
+              <h5 class="alert alert-primary ms-4 me-4">No student Records</h5>
+              {% endif%}
+            </tbody>
+          </table>
+          <!-- End Table with stripped rows -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
