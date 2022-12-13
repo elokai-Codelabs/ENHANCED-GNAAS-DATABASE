@@ -5,13 +5,12 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-    <title>GNAAS DATABASE</title>
+    <title>gnaas-dbms</title>
     <meta content="" name="description" />
     <meta content="" name="keywords" />
 
     <!-- Favicons -->
-    <link href="{% static 'assets/img/favicon.png' %}" rel="icon" />
-    <link href="{% static 'assets/img/gnaas.jfif' %}" rel="apple-touch-icon" />
+    <link href="{% static 'assets/img/gnaas.jfif' %}" rel="icon" />
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect" />
@@ -138,9 +137,12 @@
               </li>
 
               <li>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <a
+                  class="dropdown-item d-flex align-items-center"
+                  href="{% url 'logout' %}"
+                >
                   <i class="bi bi-box-arrow-right"></i>
-                  <span>Sign Out</span>
+                  <span>Log Out</span>
                 </a>
               </li>
             </ul>
@@ -170,7 +172,7 @@
             data-bs-target="#components-nav"
             data-bs-toggle="collapse"
           >
-            <i class="bi bi bi-people-fill"></i><span>Executives</span
+            <i class="bi bi-grid-3x3-gap-fill"></i><span>Executives</span
             ><i class="bi bi-chevron-down ms-auto"></i>
           </a>
           <ul
@@ -225,8 +227,8 @@
             data-bs-toggle="collapse"
             href=""
           >
-            <i class="bi bi-layout-text-window-reverse"></i
-            ><span>Committees</span><i class="bi bi-chevron-down ms-auto"></i>
+            <i class="bi bi-grid-3x3-gap-fill"></i><span>Committees</span
+            ><i class="bi bi-chevron-down ms-auto"></i>
           </a>
           <ul
             id="tables-nav"
@@ -277,18 +279,77 @@
             <span>Unions</span>
           </a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link collapsed" href="{% url 'zones' %}">
-            <i class="bi bi-grid-3x3-gap-fill"></i>
-            <span>Zones</span>
+          <a
+            class="nav-link collapsed"
+            data-bs-target="#charts-nav"
+            data-bs-toggle="collapse"
+            href="#"
+          >
+            <i class="bi bi-grid-3x3-gap-fill"></i><span>Zones</span
+            ><i class="bi bi-chevron-down ms-auto"></i>
           </a>
+          <ul
+            id="charts-nav"
+            class="nav-content collapse"
+            data-bs-parent="#sidebar-nav"
+          >
+            <li>
+              <a href="{% url 'names' %}">
+                <i class="bi bi-circle"></i><span> Zone Names</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'zones' %}">
+                <i class="bi bi-circle"></i><span>Zone Information</span>
+              </a>
+            </li>
+          </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link collapsed" href="{% url 'fellowships' %}">
-            <i class="bi bi-grid-3x3-gap-fill"></i>
-            <span> Fellowships</span>
+          <a
+            class="nav-link collapsed"
+            data-bs-target="#icons-nav"
+            data-bs-toggle="collapse"
+            href="#"
+          >
+            <i class="bi bi-grid-3x3-gap-fill"></i><span>Fellowships</span
+            ><i class="bi bi-chevron-down ms-auto"></i>
           </a>
+          <ul
+            id="icons-nav"
+            class="nav-content collapse"
+            data-bs-parent="#sidebar-nav"
+          >
+            <li>
+              <a href="{% url 'fellowships' %}?q=">
+                <i class="bi bi-circle"></i><span>All Fellowships</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'fellowships' %}?q=University">
+                <i class="bi bi-circle"></i><span>Universities</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'fellowships' %}?q=Nursing Training">
+                <i class="bi bi-circle"></i><span>Nursing Training</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'fellowships' %}?q=Teacher Training">
+                <i class="bi bi-circle"></i><span>Teacher Training</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'fellowships' %}?q=Secondary">
+                <i class="bi bi-circle"></i><span>Secondary</span>
+              </a>
+            </li>
+          </ul>
         </li>
+        <!-- End Icons Nav -->
         <li class="nav-item">
           <a class="nav-link collapsed" href="{% url 'chaplains' %}">
             <i class="bi bi-grid-3x3-gap-fill"></i>

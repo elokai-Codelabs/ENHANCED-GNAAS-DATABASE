@@ -25,7 +25,7 @@ class Executive(models.Model):
     program_of_study = models.CharField(max_length=255, blank=True,null=True)
     date_of_service = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
     leadership_level = models.CharField(max_length=100, choices=LEADERSHIP_LEVEL)
-    position =models.ForeignKey('Position', on_delete=models.CASCADE)
+    position =models.ForeignKey('Position', on_delete=models.CASCADE, null=True, blank=True)
     gnaas_fellowship =models.CharField(max_length=100, blank=True,null=True) 
     local_church =models.CharField(max_length=100, blank=True,null=True) 
     local_church_location =models.CharField(max_length=100, blank=True,null=True) 
@@ -39,13 +39,20 @@ class Executive(models.Model):
         return self.full_name
 
 
-
-class Position(models.Model):
-    position = models.CharField(max_length=255)
+class Zone_Name(models.Model):
+    name = models.CharField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        self.position = self.position.capitalize()
+        self.name = self.name.upper()
+        return self.name
+
+class Position(models.Model):
+    position = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        self.position = self.position.upper()
         return self.position
   
 
@@ -132,8 +139,19 @@ class Fellowship(models.Model):
         ('Northern Ghana Union','Northern Ghana Union'),
         
     )
+    FELLOWSHIP_TYPE = (
+        ('University', 'University'),
+       ('Secondary', 'Secondary'),
+        ('Nursing Training', 'Nursing Training'),
+        ('Teacher Training ', 'Teacher Training'),
+        
+      
+      
+        
+    )
       
     name = models.CharField(max_length=200, blank=True,null=True)
+    fellowship_type =models.CharField(max_length=200, blank=True,null=True, choices=FELLOWSHIP_TYPE) 
     location = models.CharField(max_length=100, blank=True,null=True)
     population = models.IntegerField(blank=True,null=True)
     union = models.CharField(max_length=200, blank=True,null=True, choices=UNION_NAME)

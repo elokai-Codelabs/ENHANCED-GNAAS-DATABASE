@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Executive,Position,Committee,Committee_Member, Union,Zone, Fellowship,Patron,Alumni_rep, Program
+from .models import Executive,Position,Committee,Committee_Member, Union,Zone, Fellowship,Patron,Alumni_rep, Program,Zone_Name
 # -----------------------------
 # EXCEL UPLOAD
 from import_export.admin import ImportExportModelAdmin
@@ -15,6 +15,8 @@ admin.site.register(Fellowship)
 admin.site.register(Patron)
 admin.site.register(Alumni_rep)
 admin.site.register(Program)
+admin.site.register(Zone_Name)
+
 
 
 

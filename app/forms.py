@@ -1,6 +1,9 @@
 from django.forms import ModelForm
 from django import forms
-from .models import Executive,Committee,Committee_Member,Union,Zone, Fellowship,Patron,Chaplain,Alumni_rep, Position,Program
+from .models import Executive,Committee,Committee_Member,Union,Zone, Fellowship,Patron,Chaplain,Alumni_rep, Position,Program,Zone_Name
+# USER AUTHENTICATION
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 from import_export import resources
 
@@ -130,6 +133,18 @@ class PositionsForm(ModelForm):
         for name, field in self.fields.items():
             field.widget.attrs.update({'class':'form-control'})
 
+class ZoneNameForm(ModelForm):
+    class Meta:
+        model = Zone_Name
+        fields ='__all__'
+       
+    def __init__(self, *args, **kwargs):
+        super(ZoneNameForm, self).__init__(*args, **kwargs)
+        # or this super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({'class':'form-control'})
+
 class ProgramForm(ModelForm):
     class Meta:
         model = Program
@@ -142,6 +157,20 @@ class ProgramForm(ModelForm):
         for name, field in self.fields.items():
             field.widget.attrs.update({'class':'form-control'})
 
+# USER AUTHENTICATION AND CREATION FORMAT
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields =['first_name','email','username','password1','password2']
+        label = {
+           'first_name':'Name',
+        }  
+
+    def __init__(self,*args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({'class':'form-control'})  
 class ExecutiveResource(resources.ModelResource):
      class Meta:
             model = Executive

@@ -10,16 +10,103 @@
           <div class="binary-container">
             <!-- ASSETS>CSS>STYLE.CSS> -->
             <div class="binary_content">
-              <span class="binary">Copy</span>
               <span class="binary">Excel</span>
               <span class="binary">CSV</span>
               <span class="binary">PDF</span>
-              <span>
-                <a href="" class="btn btn-primary">
-                  <i class="bi bi-upload" style="font-size: 1.4rem"></i>&nbsp;
-                  Upload Patrons
-                </a></span
+              <!-- ========================================= -->
+              <!-- ===========VIEW MODAL TO GUIDE USERS ON HOW TO UPLOAD EXCEL FILES START-->
+              <!-- ======================================== -->
+
+              <!-- Basic Modal -->
+              <button
+                type="button"
+                class="btn btn-primary sm"
+                data-bs-toggle="modal"
+                data-bs-target="#basicModal"
               >
+                <i class="bi bi-upload" style="font-size: 1.4rem"></i>&nbsp;
+                Upload from excel sheet
+              </button>
+              <div class="modal fade" id="basicModal" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">STEPS TO FOLLOW</h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <ol>
+                        <li>
+                          <!-- {% static 'excel_template/executive.xlsx' %} -->
+                          <a href="" download
+                            >Click here to Download the template file</a
+                          >
+                        </li>
+                        <li>Provide accurate information under each column</li>
+                        <li>
+                          Click on
+                          <span style="font-weight: 900">Choose File</span> to
+                          select the file and click on
+                          <span style="font-weight: 900">Upload File</span> to
+                          Submit
+                        </li>
+                        <br />
+                        <a href="" class="btn btn-primary">
+                          <form
+                            action=""
+                            method="post"
+                            enctype="multipart/form-data"
+                          >
+                            {% csrf_token %}
+                            <input type="file" name="file" id="file" />
+
+                            <button>
+                              <i
+                                class="bi bi-upload"
+                                style="font-size: 1.4rem"
+                              ></i
+                              >&nbsp; Upload File
+                            </button>
+                          </form>
+                        </a>
+                      </ol>
+                      <br />
+                      <p>
+                        <span style="font-weight: 900">NOTE THE FOLLOWING</span>
+                      </p>
+                      <!-- note for users -->
+                      <ul>
+                        <li>Hyphens (-) are not allowed in compound words</li>
+                        <li>
+                          Each word must begin with a capital letter (Captalize)
+                        </li>
+                        <li>
+                          All columns apart from the first columns can be null
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Basic Modal-->
+
+              <!-- ========================================= -->
+              <!-- ===========VIEW MODAL MODAL TO GUIDE USERS ON HOW TO UPLOAD EXCEL FILES END-->
+              <!-- ======================================== -->
             </div>
             <div class="binary_content">
               <a href="{% url 'create-patron' %}" class="btn btn-secondary">
@@ -186,7 +273,7 @@
                             Cancel
                           </button>
                           <form
-                            action="{% url 'delete' patron.id %}"
+                            action="{% url 'delete-patron' patron.id %}"
                             method="POST"
                           >
                             {% csrf_token %}
@@ -209,8 +296,7 @@
               {% endfor %}
 
               <!--  -->
-              {%else %}
-              <h5 class="alert alert-primary ms-4 me-4">No student Records</h5>
+
               {% endif%}
             </tbody>
           </table>

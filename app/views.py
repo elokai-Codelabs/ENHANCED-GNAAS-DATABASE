@@ -1,18 +1,79 @@
 from django.shortcuts import render,redirect
-from .models import Executive,Committee,Committee_Member, Union,Zone,Fellowship, Position, Chaplain,Patron,Alumni_rep,Program
-from .forms import ExecutiveForm,CommitteeForm,MembersForm, UnionsForm,ZoneForm,FellowshipForm, PositionsForm,ChaplainForm,PatronForm,AlumniRepForm,ProgramForm, ExecutiveResource
+# models
+from .models import Executive,Committee,Committee_Member, Union,Zone,Fellowship, Position, Chaplain,Patron,Alumni_rep,Program, Zone_Name
+# forms
+from .forms import ExecutiveForm,CommitteeForm,MembersForm, UnionsForm,ZoneForm,FellowshipForm, PositionsForm,ChaplainForm,PatronForm,AlumniRepForm,ProgramForm,ZoneNameForm
 
-# uploading excel
+# User authentication start 
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from tablib import Dataset
+
+from .forms import CustomUserCreationForm
+# User authentication end 
+
+
+# IMPORT PANDAS
+import pandas as pd
 
 # Create your views here.
+@login_required(login_url='login')
 def index(request):
-    # get all national executives
+    # counting items in tables
+    union_count = Union.objects.count()
+    zone_count = Zone.objects.count()
+    university_fellowship_count = Fellowship.objects.filter(fellowship_type='University').count()
+    nursing_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Secondary').count()
+    teacher_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Nursing Training').count()
+    shs_fellowship_count = Fellowship.objects.filter(fellowship_type='Teacher Training').count()
+    patrons_count = Patron.objects.count()
+    chaplains_count = Chaplain.objects.count()
+    alumni_rep_count = Alumni_rep.objects.count()
+    committee_count = Committee.objects.count()
+    program_count = Program.objects.count()
+    executive_count = Executive.objects.count()
+
+
+        # get all national executives
     nationals = Executive.objects.filter(leadership_level='National')
-    context = {'nationals':nationals}
+    context = {'nationals':nationals,'union_count':union_count,'zone_count':zone_count,'university_fellowship_count':university_fellowship_count,'nursing_training_fellowship_count':nursing_training_fellowship_count,'teacher_training_fellowship_count':teacher_training_fellowship_count,'shs_fellowship_count':shs_fellowship_count,'committee_count':committee_count,'patrons_count':patrons_count,'chaplains_count':chaplains_count,'alumni_rep_count':alumni_rep_count,'program_count':program_count,'executive_count':executive_count}
+
     return render(request, 'app/index.html', context)
 
+
+# 
+# ============USER AUTHENTICATION , LOGIN AND LOGOUT==========
+# ============================================================
+def loginUser(request):
+    # prevent already loged in users from seing login page
+    context = {}
+    if request.method == 'GET':
+        return render(request,'app/login.html', context)
+    # if request.user.is_authenticated:
+    #     return redirect('index')
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request,'User succesfully logged in')
+            return redirect('index')
+        else:
+            messages.error(request,'Invalid username or password')
+    return render(request,'app/login.html', context)   
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
+
+
+@login_required(login_url='login')
 def show_executive(request):
     query = request.GET.get('q') or ''
     if query == '':
@@ -27,6 +88,7 @@ def show_executive(request):
 
 # =================================================================
 # ============  CREATING EXECUTIVE ============================
+@login_required(login_url='login')
 def create_executive(request):
     form = ExecutiveForm()
 
@@ -38,6 +100,7 @@ def create_executive(request):
     context = {'forms': form}
     return render(request, 'app/create_executive.html', context)
 
+@login_required(login_url='login')
 def edit_executive(request,pk):
     executive = Executive.objects.get(pk=pk)
     form = ExecutiveForm(instance=executive)
@@ -51,6 +114,8 @@ def edit_executive(request,pk):
     context = {'forms': form}
     return render(request, 'app/create_executive.html', context)
 
+
+@login_required(login_url='login')
 def delete_executive(request,pk):
     executive = Executive.objects.get(pk=pk)
 
@@ -61,11 +126,15 @@ def delete_executive(request,pk):
     
 # =================================================================
 # ============  CREATING COMMITEE ============================
+
+@login_required(login_url='login')
 def show_committee(request):
     committees = Committee.objects.all()
     context = {'committees': committees}
     return render(request, 'app/show_committees.html', context)
 
+
+@login_required(login_url='login')
 def create_committee(request):
     form = CommitteeForm()
 
@@ -73,10 +142,12 @@ def create_committee(request):
         form = CommitteeForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect('committees')
     context = {'forms': form}
     return render(request, 'app/create_committee.html', context)
 
+
+@login_required(login_url='login')
 def edit_committee(request,pk):
     committee = Committee.objects.get(pk=pk)
     form = CommitteeForm(instance=committee)
@@ -90,6 +161,8 @@ def edit_committee(request,pk):
     context = {'forms': form}
     return render(request, 'app/create_committee.html', context)
 
+
+@login_required(login_url='login')
 def delete_member(request,pk):
     committee = Committee.objects.get(pk=pk)
 
@@ -103,6 +176,8 @@ def delete_member(request,pk):
 
 # =================================================================
 # ============ END CREATING COMMITEE MEMBERS=======================
+
+@login_required(login_url='login')
 def create_member(request):
     form = MembersForm()
 
@@ -114,12 +189,14 @@ def create_member(request):
     context = {'forms': form}
     return render(request, 'app/create_members.html', context)
 
-
+@login_required(login_url='login')
 def show_members(request):
     members = Committee_Member.objects.all()
     context = {'members': members}
     return render(request, 'app/show_members.html', context)
 
+
+@login_required(login_url='login')
 def edit_member(request,pk):
     members = Committee_Member.objects.get(pk=pk)
     form = MembersForm(instance=members)
@@ -133,6 +210,7 @@ def edit_member(request,pk):
     context = {'forms': form}
     return render(request, 'app/create_members.html', context)
 
+@login_required(login_url='login')
 def delete_committee(request,pk):
     members = Committee_Member.objects.get(pk=pk)
 
@@ -144,11 +222,14 @@ def delete_committee(request,pk):
 # 
 # =================================================================
 # ============  CREATING UNIONS ==============================
+@login_required(login_url='login')
 def show_unions(request):
     unions = Union.objects.all()
     context = {'unions': unions}
     return render(request, 'app/show_unions.html', context)
 
+
+@login_required(login_url='login')
 def create_union(request):
     form = UnionsForm()
 
@@ -160,6 +241,9 @@ def create_union(request):
     context = {'forms': form}
     return render(request, 'app/create_union.html', context)
 
+
+
+@login_required(login_url='login')
 def edit_union(request,pk):
     unions = Union.objects.get(pk=pk)
     form = UnionsForm(instance=unions)
@@ -173,6 +257,7 @@ def edit_union(request,pk):
     context = {'forms': form}
     return render(request, 'app/create_union.html', context)
 
+@login_required(login_url='login')
 def delete_union(request,pk):
     unions = Union.objects.get(pk=pk)
 
@@ -184,11 +269,14 @@ def delete_union(request,pk):
 # 
 # =================================================================
 # ============  CREATING ZONES ==============================
+@login_required(login_url='login')
 def show_zones(request):
     zones = Zone.objects.all()
     context = {'zones': zones}
     return render(request, 'app/show_zones.html', context)
 
+
+@login_required(login_url='login')
 def create_zone(request):
     form = ZoneForm()
 
@@ -200,6 +288,8 @@ def create_zone(request):
     context = {'forms': form}
     return render(request, 'app/create_zone.html', context)
 
+
+@login_required(login_url='login')
 def edit_zone(request,pk):
     zones = Zone.objects.get(pk=pk)
     form = ZoneForm(instance=zones)
@@ -213,6 +303,8 @@ def edit_zone(request,pk):
     context = {'forms': form}
     return render(request, 'app/create_zone.html', context)
 
+
+@login_required(login_url='login')
 def delete_zone(request,pk):
     zones = Zone.objects.get(pk=pk)
 
@@ -223,13 +315,22 @@ def delete_zone(request,pk):
 
 
 
+
+
 # =================================================================
 # ============  CREATING fellowship ==============================
+@login_required(login_url='login')
 def show_fellowships(request):
-    fellowships = Fellowship.objects.all()
+    query = request.GET.get('q') or ''
+    if query == '':
+        fellowships = Fellowship.objects.all()
+    else:
+        fellowships = Fellowship.objects.filter(fellowship_type=query)
+    
     context = {'fellowships': fellowships}
     return render(request, 'app/show_fellowships.html', context)
 
+@login_required(login_url='login')
 def create_fellowship(request):
     form = FellowshipForm()
 
@@ -241,6 +342,8 @@ def create_fellowship(request):
     context = {'forms': form}
     return render(request, 'app/create_fellowship.html', context)
 
+
+@login_required(login_url='login')
 def edit_fellowship(request,pk):
     fellowship = Fellowship.objects.get(pk=pk)
     form = FellowshipForm(instance=fellowship)
@@ -254,6 +357,8 @@ def edit_fellowship(request,pk):
     context = {'forms': form}
     return render(request, 'app/create_fellowship.html', context)
 
+
+@login_required(login_url='login')
 def delete_fellowship(request,pk):
     fellowship = Fellowship.objects.get(pk=pk)
 
@@ -267,11 +372,14 @@ def delete_fellowship(request,pk):
 # 
 # =================================================================
 # ============  CREATING POSITIONS ==============================
+@login_required(login_url='login')
 def show_positions(request):
     positions = Position.objects.all()
     context = {'positions': positions}
     return render(request, 'app/show_position.html', context)
 
+
+@login_required(login_url='login')
 def create_position(request):
     form = PositionsForm()
 
@@ -283,6 +391,8 @@ def create_position(request):
     context = {'forms': form}
     return render(request, 'app/create_position.html', context)
 
+
+@login_required(login_url='login')
 def edit_position(request,pk):
     positions = Position.objects.get(pk=pk)
     form = PositionsForm(instance=positions)
@@ -296,6 +406,8 @@ def edit_position(request,pk):
     context = {'forms': form}
     return render(request, 'app/create_position.html', context)
 
+
+@login_required(login_url='login')
 def delete_position(request,pk):
     positions = Position.objects.get(pk=pk)
 
@@ -304,16 +416,65 @@ def delete_position(request,pk):
         return redirect('positions')
     return redirect('positions')
 
+# =================ZONE NAMES START==================
+@login_required(login_url='login')
+def show_zone_names(request):
+    zones = Zone_Name.objects.all()
+    context = {'zones': zones}
+    return render(request, 'app/show_zone_names.html', context)
+
+
+@login_required(login_url='login')
+def create_zone_name(request):
+    form = ZoneNameForm()
+
+    if request.method == 'POST':
+        form = ZoneNameForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('names')
+    context = {'forms': form}
+    return render(request, 'app/create_zone_names.html', context)
+
+
+@login_required(login_url='login')
+def edit_zone_name(request,pk):
+    zones = Zone_Name.objects.get(pk=pk)
+    form = ZoneNameForm(instance=zones)
+    
+
+    if request.method == 'POST':
+        form = ZoneNameForm(request.POST, request.FILES,instance=zones)
+        if form.is_valid():
+            form.save()
+            return redirect('names')
+    context = {'forms': form}
+    return render(request, 'app/create_zone_names.html', context)
+
+
+@login_required(login_url='login')
+def delete_zone_name(request,pk):
+    zones = Zone_Name.objects.get(id=pk)
+
+    if request.method == 'POST':
+        zones.delete()
+        return redirect('names')
+    return redirect('names')
+
 
 
 
 # =================================================================
 # ============  CREATING CHAPLAINS/PCM ==============================
+
+@login_required(login_url='login')
 def show_chaplains(request):
     chaplains = Chaplain.objects.all()
     context = {'chaplains': chaplains}
     return render(request, 'app/show_chaplains.html', context)
 
+
+@login_required(login_url='login')
 def create_chaplain(request):
     form = ChaplainForm()
 
@@ -325,6 +486,8 @@ def create_chaplain(request):
     context = {'forms': form}
     return render(request, 'app/create_chaplain.html', context)
 
+
+@login_required(login_url='login')
 def edit_chaplain(request,pk):
     chaplains = Chaplain.objects.get(pk=pk)
     form = ChaplainForm(instance=chaplains)
@@ -338,6 +501,8 @@ def edit_chaplain(request,pk):
     context = {'forms': form}
     return render(request, 'app/create_chaplain.html', context)
 
+
+@login_required(login_url='login')
 def delete_chaplain(request,pk):
     chaplains = Chaplain.objects.get(pk=pk)
 
@@ -350,11 +515,14 @@ def delete_chaplain(request,pk):
 
 # =================================================================
 # ============  CREATING PATRONS ==============================
+@login_required(login_url='login')
 def show_patrons(request):
     patrons = Patron.objects.all()
     context = {'patrons': patrons}
     return render(request, 'app/show_patrons.html', context)
 
+
+@login_required(login_url='login')
 def create_patron(request):
     form = PatronForm()
 
@@ -366,6 +534,8 @@ def create_patron(request):
     context = {'forms': form}
     return render(request, 'app/create_patron.html', context)
 
+
+@login_required(login_url='login')
 def edit_patron(request,pk):
     patrons = Patron.objects.get(pk=pk)
     form = PatronForm(instance=patrons)
@@ -378,7 +548,7 @@ def edit_patron(request,pk):
             return redirect('patrons')
     context = {'forms': form}
     return render(request, 'app/create_patron.html', context)
-
+@login_required(login_url='login')
 def delete_patron(request,pk):
     patrons = Patron.objects.get(pk=pk)
 
@@ -391,11 +561,16 @@ def delete_patron(request,pk):
     
 # =================================================================
 # ============  CREATING ALUMNI REPS ==============================
+@login_required(login_url='login')
 def show_alumni(request):
     alumni = Alumni_rep.objects.all()
     context = {'alumni': alumni}
     return render(request, 'app/show_alumni.html', context)
 
+
+
+
+@login_required(login_url='login')
 def create_alumni(request):
     form = AlumniRepForm()
 
@@ -407,6 +582,8 @@ def create_alumni(request):
     context = {'forms': form}
     return render(request, 'app/create_alumni.html', context)
 
+
+@login_required(login_url='login')
 def edit_alumni(request,pk):
     alumni = Alumni_rep.objects.get(pk=pk)
     form = AlumniRepForm(instance=alumni)
@@ -420,6 +597,9 @@ def edit_alumni(request,pk):
     context = {'forms': form}
     return render(request, 'app/create_alumni.html', context)
 
+
+
+@login_required(login_url='login')
 def delete_alumni(request,pk):
     alumni = Alumni_rep.objects.get(pk=pk)
 
@@ -432,11 +612,15 @@ def delete_alumni(request,pk):
    
 # =================================================================
 # ============  CREATING PROGRAMS ==============================
+
+@login_required(login_url='login')
 def show_programs(request):
     programs = Program.objects.all()
     context = {'programs': programs}
     return render(request, 'app/show_programs.html', context)
 
+
+@login_required(login_url='login')
 def create_program(request):
     form = ProgramForm()
 
@@ -448,6 +632,9 @@ def create_program(request):
     context = {'forms': form}
     return render(request, 'app/create_program.html', context)
 
+
+
+@login_required(login_url='login')
 def edit_program(request,pk):
     programs = Program.objects.get(pk=pk)
     form = ProgramForm(instance=programs)
@@ -461,10 +648,19 @@ def edit_program(request,pk):
     context = {'forms': form}
     return render(request, 'app/create_program.html', context)
 
+
+@login_required(login_url='login')
 def delete_program(request,pk):
-    programs = Program.objects.get(pk=pk)
+    programs = Program.objects.get(id=pk)
 
     if request.method == 'POST':
         programs.delete()
         return redirect('programs')
     return redirect('programs')
+
+
+
+
+
+
+    
