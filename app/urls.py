@@ -90,6 +90,23 @@ urlpatterns = [
     path('read_committee/', excel_to_db.read_committee_excel, name='read_committee'),
     path('read_committee_member/', excel_to_db.read_committee_member_excel, name='read_committee_member'),
     path('read_position/', excel_to_db.read_position_excel, name='read_position'),
+    path('read_program/', excel_to_db.read_program_excel, name='read_program'),
+    path('read_union/', excel_to_db.read_union_excel, name='read_union'),
+    path('read_fellowship/', excel_to_db.read_fellowship_excel, name='read_fellowship'),
+    path('read_chaplain/', excel_to_db.read_chaplains_excel, name='read_chaplain'),
+    path('read_patron/', excel_to_db.read_patrons_excel, name='read_patron'),
+    path('read_alumni/', excel_to_db.read_alumni_excel, name='read_alumni'),
+
+    
+
+
+    
+
+
+
+
+
+    
 
 
     

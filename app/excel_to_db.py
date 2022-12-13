@@ -69,7 +69,7 @@ def read_zone_details_excel(request):
             # we are filtering where position is equal to where in the column
             # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
 
-            zones = Zone.objects.get_or_create(name=row['ZONE_NAME'],school_hosting=row['SCHOOL_HOSTING'],president=row['PRESIDENT'],president_contact=row['PRESIDENT_CONTACT'],secretary=row['SECRETARY'],secretary_contact=row['SECRETARY_CONTACT'],treasurer=row['TREASURER'],treasurer_contact=row['TREASURER_CONTACT'],coordinating_secretary=row['COORDINATING_SECRETARY'],coordinating_secretary_contact=row['COORDINATING_SECRETARY_CONTACT'],)
+            zones = Zone.objects.get_or_create(name=row['ZONE_NAME'],school_hosting=row['SCHOOL_HOSTING'],academic_year=row['ACADEMIC_YEAR'],president=row['PRESIDENT'],president_contact=row['PRESIDENT_CONTACT'],secretary=row['SECRETARY'],secretary_contact=row['SECRETARY_CONTACT'],treasurer=row['TREASURER'],treasurer_contact=row['TREASURER_CONTACT'],coordinating_secretary=row['COORDINATING_SECRETARY'],coordinating_secretary_contact=row['COORDINATING_SECRETARY_CONTACT'],)
 
         messages.success(request,'Zones uploaded succesfully')
         # print('Successfully uploaded')
@@ -145,3 +145,144 @@ def read_position_excel(request):
         # print('Successfully uploaded')
 
         return redirect('positions')
+
+def read_program_excel(request):
+    
+    if request.method == 'POST':
+            
+
+        file = request.FILES.get("file")
+        excel_file = pd.read_excel(file)
+        df = pd.DataFrame(excel_file)
+
+        for index,row in df.iterrows():
+            # if you have a foreign key for a field, you get it first
+            # we are filtering where position is equal to where in the column
+            # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
+
+            committee = Program.objects.get_or_create(name=row['PROGRAM_NAME'],date=row['PROGRAM_DATE'],description=row['PROGRAM_DESCRIPTION'],cost = row['PROGRAM_COST'], program_level = row['PROGRAM_LEVEL'])
+
+        messages.success(request,'Programs uploaded succesfully')
+        # print('Successfully uploaded')
+
+        return redirect('programs')
+
+
+def read_union_excel(request):
+    
+    if request.method == 'POST':
+            
+
+        file = request.FILES.get("file")
+        excel_file = pd.read_excel(file)
+        df = pd.DataFrame(excel_file)
+
+        for index,row in df.iterrows():
+            # if you have a foreign key for a field, you get it first
+            # we are filtering where position is equal to where in the column
+            # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
+
+            zones = Union.objects.get_or_create(name=row['UNION_NAME'],school_hosting=row['SCHOOL_HOSTING'],    academic_year=row['ACADEMIC_YEAR'],president=row['PRESIDENT'],president_contact=row['PRESIDENT_CONTACT'],secretary=row['SECRETARY'],secretary_contact=row['SECRETARY_CONTACT'],treasurer=row['TREASURER'],treasurer_contact=row['TREASURER_CONTACT'],coordinating_secretary=row['COORDINATING_SECRETARY'],coordinating_secretary_contact=row['COORDINATING_SECRETARY_CONTACT'],)
+
+        messages.success(request,'Unions uploaded succesfully')
+        # print('Successfully uploaded')
+
+        return redirect('unions')
+
+
+
+
+
+def read_fellowship_excel(request):
+    
+    if request.method == 'POST':
+            
+
+        file = request.FILES.get("file")
+        excel_file = pd.read_excel(file)
+        df = pd.DataFrame(excel_file)
+
+        for index,row in df.iterrows():
+            # if you have a foreign key for a field, you get it first
+            # we are filtering where position is equal to where in the column
+            # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
+            zone = Zone_Name.objects.filter(name=row['ZONE']).first()
+
+            fellowship = Fellowship.objects.get_or_create(name=row['FELLOWSHIP_NAME'],fellowship_type=row['FELLOWSHIP_TYPE'],academic_year=row['ACADEMIC_YEAR'],location=row['LOCATION'],population=row['POPULATION'],union=row['UNION'],zone=zone,president=row['PRESIDENT'],president_contact=row['PRESIDENT_CONTACT'],secretary=row['SECRETARY'],secretary_contact=row['SECRETARY_CONTACT'],treasurer=row['TREASURER'],treasurer_contact=row['TREASURER_CONTACT'],chaplain_or_patron=row['CHAPLAIN_OR_PATRON'],chaplain_contact=row['CHAPLAIN_OR_PATRON_CONTACT'],)
+
+        messages.success(request,'Fellowships uploaded succesfully')
+        # print('Successfully uploaded')
+
+        return redirect('fellowships')
+
+
+# CHAPLAINS AND PCM DIRECTORS
+def read_chaplains_excel(request):
+    
+    if request.method == 'POST':
+            
+
+        file = request.FILES.get("file")
+        excel_file = pd.read_excel(file)
+        df = pd.DataFrame(excel_file)
+
+        for index,row in df.iterrows():
+            # if you have a foreign key for a field, you get it first
+            # we are filtering where position is equal to where in the column
+            # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
+            zone = Zone_Name.objects.filter(name=row['ZONE']).first()
+
+            fellowship = Chaplain.objects.get_or_create(academic_year=row['ACADEMIC_YEAR'],name=row['CHAPLAINS_NAME'],phone=row['PHONE'],email=row['EMAIL'],fellowship=row['FELLOWSHIP'],zone=zone,union=row['UNION'])
+
+        messages.success(request,'Chaplain uploaded succesfully')
+        # print('Successfully uploaded')
+
+        return redirect('chaplains')
+
+# GNAAS PATRONS
+def read_patrons_excel(request):
+    
+    if request.method == 'POST':
+            
+
+        file = request.FILES.get("file")
+        excel_file = pd.read_excel(file)
+        df = pd.DataFrame(excel_file)
+
+        for index,row in df.iterrows():
+            # if you have a foreign key for a field, you get it first
+            # we are filtering where position is equal to where in the column
+            # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
+            zone = Zone_Name.objects.filter(name=row['ZONE']).first()
+            patrons = Patron.objects.get_or_create(academic_year=row['ACADEMIC_YEAR'],name=row['PATRONS_NAME'],phone=row['PHONE'],email=row['EMAIL'],fellowship=row['FELLOWSHIP'],zone=zone,union=row['UNION'])
+
+        messages.success(request,'Patrons uploaded succesfully')
+        # print('Successfully uploaded')
+
+        return redirect('patrons')
+
+
+# GNAAS ALUMNI REPS
+def read_alumni_excel(request):
+    
+    if request.method == 'POST':
+            
+
+        file = request.FILES.get("file")
+        excel_file = pd.read_excel(file)
+        df = pd.DataFrame(excel_file)
+
+        for index,row in df.iterrows():
+            # if you have a foreign key for a field, you get it first
+            # we are filtering where position is equal to where in the column
+            # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
+            zone = Zone_Name.objects.filter(name=row['ZONE']).first()
+
+            alumni = Alumni_rep.objects.get_or_create(academic_year=row['ACADEMIC_YEAR'],name=row['ALUMNI_NAME'],phone=row['PHONE'],email=row['EMAIL'],gnaas_fellowship=row['GNAAS_FELLOWSHIP'],local_church=row['LOCAL_CHURCH'],occupation=row['OCCUPATION'],zone=zone,union=row['UNION'])
+
+
+
+        messages.success(request,'Alumni uploaded succesfully')
+        # print('Successfully uploaded')
+
+        return redirect('alumni')

@@ -96,6 +96,11 @@ class Committee_Member(models.Model):
         return self.date_of_service.strftime('%Y')
 
 class Union(models.Model):
+    def get_years() -> tuple:
+        BASE_YEAR = 2021
+        CURRENT_YEAR = datetime.now().year
+        diff = (int(CURRENT_YEAR - BASE_YEAR)) if (CURRENT_YEAR - BASE_YEAR) else 1
+        return tuple([(str(BASE_YEAR + i), str(BASE_YEAR + i)) for i in range(0, diff+1)])
     UNION_NAME = (
        ('Southern Ghana Union', 'Southern Ghana Union'),
         ('Northern Ghana Union','Northern Ghana Union'),
@@ -103,6 +108,7 @@ class Union(models.Model):
     )
     name = models.CharField(max_length=100, choices=UNION_NAME)
     school_hosting = models.CharField(max_length=200,blank=True,null=True)
+    academic_year = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
     president = models.CharField(max_length=200,blank=True,null=True)
     president_contact = models.IntegerField(blank=True,null=True)
     secretary = models.CharField(max_length=200,blank=True,null=True)
@@ -117,9 +123,15 @@ class Union(models.Model):
         return self.name
 
 class Zone(models.Model):
+    def get_years() -> tuple:
+        BASE_YEAR = 2021
+        CURRENT_YEAR = datetime.now().year
+        diff = (int(CURRENT_YEAR - BASE_YEAR)) if (CURRENT_YEAR - BASE_YEAR) else 1
+        return tuple([(str(BASE_YEAR + i), str(BASE_YEAR + i)) for i in range(0, diff+1)])
   
     name = models.CharField(max_length=200, blank=True,null=True)
     school_hosting = models.CharField(max_length=200,blank=True,null=True)
+    academic_year = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
     president = models.CharField(max_length=200,blank=True,null=True)
     president_contact = models.IntegerField(blank=True,null=True)
     secretary = models.CharField(max_length=200,blank=True,null=True)
@@ -143,19 +155,21 @@ class Fellowship(models.Model):
         ('University', 'University'),
        ('Secondary', 'Secondary'),
         ('Nursing Training', 'Nursing Training'),
-        ('Teacher Training ', 'Teacher Training'),
-        
-      
-      
-        
+        ('Teacher Training ', 'Teacher Training'),    
     )
+    def get_years() -> tuple:
+        BASE_YEAR = 2021
+        CURRENT_YEAR = datetime.now().year
+        diff = (int(CURRENT_YEAR - BASE_YEAR)) if (CURRENT_YEAR - BASE_YEAR) else 1
+        return tuple([(str(BASE_YEAR + i), str(BASE_YEAR + i)) for i in range(0, diff+1)])
       
     name = models.CharField(max_length=200, blank=True,null=True)
     fellowship_type =models.CharField(max_length=200, blank=True,null=True, choices=FELLOWSHIP_TYPE) 
+    academic_year = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
     location = models.CharField(max_length=100, blank=True,null=True)
     population = models.IntegerField(blank=True,null=True)
     union = models.CharField(max_length=200, blank=True,null=True, choices=UNION_NAME)
-    zone = models.ForeignKey(Zone, null=True, blank=True, on_delete=models.CASCADE)
+    zone = models.ForeignKey(Zone_Name, null=True, blank=True, on_delete=models.CASCADE)
     president = models.CharField(max_length=200,blank=True,null=True)
     president_contact = models.IntegerField(blank=True,null=True)
     secretary = models.CharField(max_length=200,blank=True,null=True)
@@ -175,14 +189,20 @@ class Fellowship(models.Model):
 class Patron(models.Model):
     UNION_NAME = (
         ('Southern Ghana Union', 'Southern Ghana Union'),
-        ('Northern Ghana Union','Northern Ghana Union'),
-        
+        ('Northern Ghana Union','Northern Ghana Union'),    
     )
+    def get_years() -> tuple:
+        BASE_YEAR = 2021
+        CURRENT_YEAR = datetime.now().year
+        diff = (int(CURRENT_YEAR - BASE_YEAR)) if (CURRENT_YEAR - BASE_YEAR) else 1
+        return tuple([(str(BASE_YEAR + i), str(BASE_YEAR + i)) for i in range(0, diff+1)])
+        
+    academic_year = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=50)
     email = models.EmailField(max_length=100)
     fellowship = models.CharField(max_length=150)
-    zone = models.ForeignKey(Zone, null=True, blank=True, on_delete=models.CASCADE)
+    zone = models.ForeignKey(Zone_Name, null=True, blank=True, on_delete=models.CASCADE)
     union = models.CharField(max_length=100, choices=UNION_NAME)
 
     def __str__(self):
@@ -194,11 +214,18 @@ class Chaplain(models.Model):
         ('Northern Ghana Union','Northern Ghana Union'),
         
     )
+    def get_years() -> tuple:
+        BASE_YEAR = 2021
+        CURRENT_YEAR = datetime.now().year
+        diff = (int(CURRENT_YEAR - BASE_YEAR)) if (CURRENT_YEAR - BASE_YEAR) else 1
+        return tuple([(str(BASE_YEAR + i), str(BASE_YEAR + i)) for i in range(0, diff+1)])
+
+    academic_year = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
     name = models.CharField(max_length=255)
     phone = models.IntegerField(null=True, blank=True)
     email = models.EmailField(max_length=100)
     fellowship = models.CharField(max_length=150)
-    zone = models.ForeignKey(Zone, null=True, blank=True, on_delete=models.CASCADE)
+    zone = models.ForeignKey(Zone_Name, null=True, blank=True, on_delete=models.CASCADE)
     union = models.CharField(max_length=100, choices=UNION_NAME)
     
     def __str__(self):
@@ -210,13 +237,20 @@ class Alumni_rep(models.Model):
         ('Northern Ghana Union','Northern Ghana Union'),
         
     )
+    def get_years() -> tuple:
+        BASE_YEAR = 2021
+        CURRENT_YEAR = datetime.now().year
+        diff = (int(CURRENT_YEAR - BASE_YEAR)) if (CURRENT_YEAR - BASE_YEAR) else 1
+        return tuple([(str(BASE_YEAR + i), str(BASE_YEAR + i)) for i in range(0, diff+1)])
+
+    academic_year = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
     name = models.CharField(max_length=255)
     phone = models.IntegerField(null=True, blank=True)
     email = models.EmailField(max_length=100)
     gnaas_fellowship = models.CharField(max_length=150)
     local_church = models.CharField(max_length=150)
     occupation = models.CharField(max_length=150)
-    zone = models.ForeignKey(Zone, null=True, blank=True, on_delete=models.CASCADE)
+    zone = models.ForeignKey(Zone_Name, null=True, blank=True, on_delete=models.CASCADE)
     union = models.CharField(max_length=100, choices=UNION_NAME)
 
     def __str__(self):
@@ -230,6 +264,13 @@ class Program(models.Model):
         ('Zone','Zone'),
         ('Fellowship','Fellowship'),
     )
+    def get_years() -> tuple:
+        BASE_YEAR = 2021
+        CURRENT_YEAR = datetime.now().year
+        diff = (int(CURRENT_YEAR - BASE_YEAR)) if (CURRENT_YEAR - BASE_YEAR) else 1
+        return tuple([(str(BASE_YEAR + i), str(BASE_YEAR + i)) for i in range(0, diff+1)])
+
+    academic_year = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
     name = models.CharField(max_length=150)
     date = models.DateField(auto_now_add=True)
     description = models.TextField(max_length=300,null=True, blank=True)

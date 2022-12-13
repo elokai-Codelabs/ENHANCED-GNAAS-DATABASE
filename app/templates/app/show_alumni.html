@@ -43,8 +43,9 @@
                     <div class="modal-body">
                       <ol>
                         <li>
-                          <!-- {% static 'excel_template/executive.xlsx' %} -->
-                          <a href="" download
+                          <a
+                            href="{% static 'excel_template/alumni.xlsx' %}"
+                            download
                             >Click here to Download the template file</a
                           >
                         </li>
@@ -59,7 +60,7 @@
                         <br />
                         <a href="" class="btn btn-primary">
                           <form
-                            action=""
+                            action="{% url 'read_alumni'%}"
                             method="post"
                             enctype="multipart/form-data"
                           >
