@@ -16,6 +16,9 @@ from .forms import CustomUserCreationForm
 
 # IMPORT PANDAS
 import pandas as pd
+# datetime
+from datetime import datetime
+
 
 # Create your views here.
 @login_required(login_url='login')
@@ -224,8 +227,15 @@ def delete_committee(request,pk):
 # ============  CREATING UNIONS ==============================
 @login_required(login_url='login')
 def show_unions(request):
+    this_year = str(datetime.now().year)
     unions = Union.objects.all()
-    context = {'unions': unions}
+
+    # if you need unions and its executives for only a particular year, 
+    # use the lines below instead of the one on top
+    # 
+    # unions = Union.objects.filter(academic_year=this_year)
+
+    context = {'unions': unions,'this_year':this_year}
     return render(request, 'app/show_unions.html', context)
 
 

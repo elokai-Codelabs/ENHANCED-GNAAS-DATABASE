@@ -24,8 +24,8 @@ def read_executive_excel(request):
             position = Position.objects.filter(position=row['POSITION']).first()
             # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
 
-            executives = Executive.objects.get_or_create(full_name=row['FULL NAME'],phone=row['PHONE'],email=row['EMAIL'],program_of_study=row['PROGRAM OF STUDY'],date_of_service=row['YEAR OF SERVICE'],leadership_level=row['LEADERSHIP LEVEL'],position=position,gnaas_fellowship=row['GNAAS FELLOWSHIP'],local_church=row['LOCAL CHURCH'],local_church_location=row['LOCAL CHURCH LOCATION'],local_church_elder=row['LOCAL CHURCH ELDER'],local_church_elder_contact=row['ELDER CONTACT'])
-            print('inserted',index)
+            executives = Executive.objects.get_or_create(full_name=row['FULL NAME'],phone=row['PHONE'],email=row['EMAIL'],program_of_study=row['PROGRAM OF STUDY'],date_of_service=row['YEAR OF SERVICE'],leadership_level=row['LEADERSHIP LEVEL'],position=position,gnaas_fellowship=row['GNAAS FELLOWSHIP'],local_church=row['LOCAL CHURCH'],local_church_location=row['LOCAL CHURCH LOCATION'],district=row['DISTRICT'],conference=row['CONFERENCE'])
+            # print('inserted',index)
 
         messages.success(request,'Executive uploaded succesfully')
         # print('Successfully uploaded')
@@ -69,7 +69,7 @@ def read_zone_details_excel(request):
             # we are filtering where position is equal to where in the column
             # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
 
-            zones = Zone.objects.get_or_create(name=row['ZONE_NAME'],school_hosting=row['SCHOOL_HOSTING'],academic_year=row['ACADEMIC_YEAR'],president=row['PRESIDENT'],president_contact=row['PRESIDENT_CONTACT'],secretary=row['SECRETARY'],secretary_contact=row['SECRETARY_CONTACT'],treasurer=row['TREASURER'],treasurer_contact=row['TREASURER_CONTACT'],coordinating_secretary=row['COORDINATING_SECRETARY'],coordinating_secretary_contact=row['COORDINATING_SECRETARY_CONTACT'],)
+            zones = Zone.objects.get_or_create(name=row['ZONE_NAME'],school_hosting=row['SCHOOL_HOSTING'],affiliated_union=row['AFFILIATED_UNION'],academic_year=row['ACADEMIC_YEAR'],president=row['PRESIDENT'],president_contact=row['PRESIDENT_CONTACT'],secretary=row['SECRETARY'],secretary_contact=row['SECRETARY_CONTACT'],treasurer=row['TREASURER'],treasurer_contact=row['TREASURER_CONTACT'],coordinating_secretary=row['COORDINATING_SECRETARY'],coordinating_secretary_contact=row['COORDINATING_SECRETARY_CONTACT'],)
 
         messages.success(request,'Zones uploaded succesfully')
         # print('Successfully uploaded')
@@ -208,7 +208,7 @@ def read_fellowship_excel(request):
             # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
             zone = Zone_Name.objects.filter(name=row['ZONE']).first()
 
-            fellowship = Fellowship.objects.get_or_create(name=row['FELLOWSHIP_NAME'],fellowship_type=row['FELLOWSHIP_TYPE'],academic_year=row['ACADEMIC_YEAR'],location=row['LOCATION'],population=row['POPULATION'],union=row['UNION'],zone=zone,president=row['PRESIDENT'],president_contact=row['PRESIDENT_CONTACT'],secretary=row['SECRETARY'],secretary_contact=row['SECRETARY_CONTACT'],treasurer=row['TREASURER'],treasurer_contact=row['TREASURER_CONTACT'],chaplain_or_patron=row['CHAPLAIN_OR_PATRON'],chaplain_contact=row['CHAPLAIN_OR_PATRON_CONTACT'],)
+            fellowship = Fellowship.objects.get_or_create(name=row['FELLOWSHIP_NAME'],fellowship_type=row['FELLOWSHIP_TYPE'],academic_year=row['ACADEMIC_YEAR'],location=row['LOCATION'],digital_address=row['DIGITAL_ADDRESS'], population=row['POPULATION'],union=row['UNION'],zone=zone,president=row['PRESIDENT'],president_contact=row['PRESIDENT_CONTACT'],secretary=row['SECRETARY'],secretary_contact=row['SECRETARY_CONTACT'],treasurer=row['TREASURER'],treasurer_contact=row['TREASURER_CONTACT'],chaplain_or_patron=row['CHAPLAIN_OR_PATRON'],chaplain_contact=row['CHAPLAIN_OR_PATRON_CONTACT'],)
 
         messages.success(request,'Fellowships uploaded succesfully')
         # print('Successfully uploaded')
@@ -279,8 +279,6 @@ def read_alumni_excel(request):
             zone = Zone_Name.objects.filter(name=row['ZONE']).first()
 
             alumni = Alumni_rep.objects.get_or_create(academic_year=row['ACADEMIC_YEAR'],name=row['ALUMNI_NAME'],phone=row['PHONE'],email=row['EMAIL'],gnaas_fellowship=row['GNAAS_FELLOWSHIP'],local_church=row['LOCAL_CHURCH'],occupation=row['OCCUPATION'],zone=zone,union=row['UNION'])
-
-
 
         messages.success(request,'Alumni uploaded succesfully')
         # print('Successfully uploaded')

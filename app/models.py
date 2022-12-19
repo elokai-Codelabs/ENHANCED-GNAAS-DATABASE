@@ -29,8 +29,8 @@ class Executive(models.Model):
     gnaas_fellowship =models.CharField(max_length=100, blank=True,null=True) 
     local_church =models.CharField(max_length=100, blank=True,null=True) 
     local_church_location =models.CharField(max_length=100, blank=True,null=True) 
-    local_church_elder =models.CharField(max_length=100, blank=True,null=True) 
-    local_church_elder_contact =models.CharField(max_length=100, blank=True,null=True) 
+    district =models.CharField(max_length=150, blank=True,null=True) 
+    conference =models.CharField(max_length=150, blank=True,null=True) 
     created = models.DateTimeField(auto_now_add=True)
 
     
@@ -80,6 +80,7 @@ class Committee_Member(models.Model):
     full_name = models.CharField(max_length=255)
     image = models.ImageField(null=True, blank=True, default='gnaas.jfif')
     contact = models.CharField(max_length=50, blank=True, null=True)
+    email = models.EmailField(max_length=255, null=True, blank=True)
     date_of_service = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
     affiliated_committee = models.ForeignKey(Committee, on_delete = models.CASCADE, blank=True,null=True)
     gnaas_fellowship = models.CharField(max_length=200,blank=True, null=True)
@@ -123,6 +124,12 @@ class Union(models.Model):
         return self.name
 
 class Zone(models.Model):
+    UNION_NAME = (
+       ('Southern Ghana Union', 'Southern Ghana Union'),
+        ('Northern Ghana Union','Northern Ghana Union'),
+        
+    )
+        
     def get_years() -> tuple:
         BASE_YEAR = 2021
         CURRENT_YEAR = datetime.now().year
@@ -131,6 +138,7 @@ class Zone(models.Model):
   
     name = models.CharField(max_length=200, blank=True,null=True)
     school_hosting = models.CharField(max_length=200,blank=True,null=True)
+    affiliated_union = models.CharField(max_length=200, blank=True,null=True,choices = UNION_NAME)
     academic_year = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
     president = models.CharField(max_length=200,blank=True,null=True)
     president_contact = models.IntegerField(blank=True,null=True)
@@ -167,6 +175,7 @@ class Fellowship(models.Model):
     fellowship_type =models.CharField(max_length=200, blank=True,null=True, choices=FELLOWSHIP_TYPE) 
     academic_year = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
     location = models.CharField(max_length=100, blank=True,null=True)
+    digital_address = models.CharField(max_length=100, blank=True,null=True)
     population = models.IntegerField(blank=True,null=True)
     union = models.CharField(max_length=200, blank=True,null=True, choices=UNION_NAME)
     zone = models.ForeignKey(Zone_Name, null=True, blank=True, on_delete=models.CASCADE)
