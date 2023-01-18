@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'gnaasDatabase.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'vrWFIrKYmmelehQPdQLv',
+        'HOST': 'containers-us-west-196.railway.app',
+        'PORT': '6527',
     }
 }
 
