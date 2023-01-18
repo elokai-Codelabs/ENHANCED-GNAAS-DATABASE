@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-0_c5ep-g%#!m0=(=emfw=i(u-htsd&cr=d(ada5mr3p+l3%%l%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'gnaasDatabase.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db.sqFlite3',
     }
 }
 

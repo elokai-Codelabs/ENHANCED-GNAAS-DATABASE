@@ -1,1 +1,2 @@
 web gunicorn gnaasDatabase.wsgi:apllication --log-file -
+
