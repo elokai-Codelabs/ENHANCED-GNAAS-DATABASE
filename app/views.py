@@ -768,13 +768,15 @@ def sms_to_fellowships(request):
 
 def show_documents(request):
     documents = Document.objects.all()
-    return render(request, 'app/show_document.html', {'documents': documents})
+    context = {'documents': documents}
+    return render(request, 'app/show_document.html', context)
 
 
 def add_document(request):
     if request.method == 'POST':
         name = request.POST['name']
         file = request.FILES['file']
+        # it means check the document table(model), file_name = name in the html as well as file
         document = Document(name=name, file=file)
         document.save()
         return redirect('documents')

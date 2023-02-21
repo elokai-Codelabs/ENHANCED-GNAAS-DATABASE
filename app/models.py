@@ -308,7 +308,7 @@ class Document(models.Model):
           ('2023',2023),
           
     )
-    file_name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
     academic_year =models.CharField(max_length=255, choices=ACADEMIC_YEAR)
     file = models.FileField(upload_to='documents/')
     def __str__(self):
