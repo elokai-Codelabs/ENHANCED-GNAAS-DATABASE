@@ -10,9 +10,6 @@
           <div class="binary-container">
             <!-- ASSETS>CSS>STYLE.CSS> -->
             <div class="binary_content">
-              <span class="binary">Excel</span>
-              <span class="binary">CSV</span>
-              <span class="binary">PDF</span>
               <!-- ========================================= -->
               <!-- ===========VIEW MODAL TO GUIDE USERS ON HOW TO UPLOAD EXCEL FILES START-->
               <!-- ======================================== -->
@@ -231,7 +228,7 @@
                     type="submit"
                     class="btn btn-danger btn-sm"
                     data-bs-toggle="modal"
-                    data-bs-target="#delete{{executive.id}}"
+                    data-bs-target="#delete{{member.id}}"
                   >
                     <i class="bi bi-trash"></i> delete
                   </button>
@@ -241,7 +238,7 @@
                   <!-- Delete modal -->
                   <div
                     class="modal"
-                    id="delete{{executive.id}}"
+                    id="delete{{member.id}}"
                     aria-labelledby="myModalLabel2"
                     aria-hidden="true"
                   >
@@ -262,8 +259,7 @@
                         </div>
                         <div class="modal-body">
                           <p>
-                            Are you sure you want to delete
-                            {{executive.full_name}}
+                            Are you sure you want to delete {{member.full_name}}
                           </p>
                         </div>
                         <div class="modal-footer">

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 # models
-from .models import Executive,Committee,Committee_Member, Union,Zone,Fellowship, Position, Chaplain,Patron,Alumni_rep,Program, Zone_Name
+from .models import Executive,Committee,Committee_Member, Union,Zone,Fellowship, Position, Chaplain,Patron,Alumni_rep,Program, Zone_Name, SMS, Document
 # forms
 from .forms import ExecutiveForm,CommitteeForm,MembersForm, UnionsForm,ZoneForm,FellowshipForm, PositionsForm,ChaplainForm,PatronForm,AlumniRepForm,ProgramForm,ZoneNameForm
 
@@ -19,6 +19,8 @@ import pandas as pd
 # datetime
 from datetime import datetime
 
+# IMPORT REQUESTS
+import requests 
 
 # Create your views here.
 @login_required(login_url='login')
@@ -50,11 +52,8 @@ def index(request):
 # ============================================================
 def loginUser(request):
     # prevent already loged in users from seing login page
-    context = {}
-    if request.method == 'GET':
-        return render(request,'app/login.html', context)
-    # if request.user.is_authenticated:
-    #     return redirect('index')
+   
+    
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -68,6 +67,7 @@ def loginUser(request):
             return redirect('index')
         else:
             messages.error(request,'Invalid username or password')
+    context = {}
     return render(request,'app/login.html', context)   
 
 
@@ -166,7 +166,7 @@ def edit_committee(request,pk):
 
 
 @login_required(login_url='login')
-def delete_member(request,pk):
+def delete_committee(request,pk):
     committee = Committee.objects.get(pk=pk)
 
     if request.method == 'POST':
@@ -214,7 +214,7 @@ def edit_member(request,pk):
     return render(request, 'app/create_members.html', context)
 
 @login_required(login_url='login')
-def delete_committee(request,pk):
+def delete_member(request,pk):
     members = Committee_Member.objects.get(pk=pk)
 
     if request.method == 'POST':
@@ -669,6 +669,116 @@ def delete_program(request,pk):
     return redirect('programs')
 
 
+
+def show_sms(request):
+    
+    sms = SMS.objects.all()    
+    context = {'sms': sms}
+    return render(request, 'app/show_sms.html',context)
+
+
+
+def sms_to_executive(request):
+    if request.method == 'POST':
+        executive = Executive.objects.all()
+        
+        sender_id = request.POST.get('sender_id')
+        title = request.POST.get('title')
+        body = request.POST.get('body')
+        message_count = len(executive)
+        message = ", ".join([title, body]) 
+        print(message)
+
+        # print(len(parents))
+        for worker in executive:
+            to_number =str(worker.phone)
+            # print(parent.phone)
+            
+            API_KEY = "OjRHbjdNV0doSXRUOFRTb0s="
+            if to_number and len(to_number)==10 and to_number.startswith("0"):
+
+                url = f"https://sms.arkesel.com/sms/api?action=send-sms&api_key={API_KEY}&to={to_number}&from={sender_id}&sms={message}"
+                print(url)
+                res = requests.get(url)
+                print(worker.phone)
+                print(res.status_code)
+                print(res.content)
+                messages.success(request, res.content)
+                
+        
+               
+            else:
+                messages.error(request, "Invalid phone number")
+                # print("invalid phone number")
+        SMS.objects.create(
+                sender_id=sender_id,
+                title=title,
+                body=body,
+                messages_sent=message_count
+               )
+        return redirect('sms')
+    context = {}
+    return render(request, 'app/sms_to_executive.html',context)
+
+
+    # HOW TO FILL SHOW TABLE WITH INFO FROM SEND_SMS
+
+#            <!-- Send SMS to Fellowship throught their presients -->
+def sms_to_fellowships(request):
+    if request.method == 'POST':
+        fellowship = Fellowship.objects.all()
+        
+        sender_id = request.POST.get('sender_id')
+        title = request.POST.get('title')
+        body = request.POST.get('body')
+        message_count = len(fellowship)
+        message = ", ".join([title, body]) 
+        print(message)
+
+        # print(len(parents))
+        for worker in fellowship:
+            to_number =str(worker.president_contact)
+            # print(parent.phone)
+            
+            API_KEY = "OjRHbjdNV0doSXRUOFRTb0s="
+            if to_number and len(to_number)==10 and to_number.startswith("0"):
+
+                url = f"https://sms.arkesel.com/sms/api?action=send-sms&api_key={API_KEY}&to={to_number}&from={sender_id}&sms={message}"
+                print(url)
+                res = requests.get(url)
+                print(worker.president_contact)
+                print(res.status_code)
+                print(res.content)
+                messages.success(request, res.content)
+                
+        
+               
+            else:
+                messages.error(request, "Invalid phone number")
+                # print("invalid phone number")
+        SMS.objects.create(
+                sender_id=sender_id,
+                title=title,
+                body=body,
+                messages_sent=message_count
+               )
+        return redirect('sms')
+    context = {}
+    return render(request, 'app/sms_to_executive.html',context)
+
+def show_documents(request):
+    documents = Document.objects.all()
+    return render(request, 'app/show_document.html', {'documents': documents})
+
+
+def add_document(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        file = request.FILES['file']
+        document = Document(name=name, file=file)
+        document.save()
+        return redirect('documents')
+    return render(request, 'app/add_document.html')
 
 
 

@@ -97,28 +97,14 @@ urlpatterns = [
     path('read_patron/', excel_to_db.read_patrons_excel, name='read_patron'),
     path('read_alumni/', excel_to_db.read_alumni_excel, name='read_alumni'),
 
-    
+    # SMS       
+    path('sms/', views.show_sms, name='sms'),
+    path("sms/executives/", views.sms_to_executive, name='sms_to_executive'),
+    path("sms/fellowship/", views.sms_to_fellowships, name='sms_to_fellowship'),
 
-
-    
-
-
-
-
-
-    
-
-
-    
-
-
-    
-
-
-
-    
-
-
+    # file uploads
+    path("files/", views.show_documents, name='documents'),
+    path("add-document/", views.add_document, name='add-document')
 
 ] 
 

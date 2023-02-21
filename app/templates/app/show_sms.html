@@ -1,0 +1,49 @@
+{% extends 'app/base.html' %} {% load static %}
+<!--  -->
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">SMS</h5>
+          <p>List of SMS Sent</p>
+          <div class="binary_content">
+            <a href="{% url 'sms_to_executive' %}" class="btn btn-primary">
+              <i class="bi bi-send"></i> &nbsp; Send SMS to Executives
+            </a>
+            <!-- Send SMS to Fellowship throught their presients -->
+            <a href="{% url 'sms_to_fellowship' %}" class="btn btn-primary">
+              <i class="bi bi-send"></i> &nbsp; Send SMS to Fellowships
+            </a>
+          </div>
+          <!-- Table with stripped rows -->
+          <table class="table datatable">
+            <thead>
+              <tr>
+                <th scope="col">Sender ID</th>
+                <th scope="col">Title</th>
+                <th>Total Messages</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for message in sms%}
+              <tr>
+                <td scope="col">{{message.sender_id}}</td>
+                <td scope="col">{{message.title}}</td>
+                <td>{{message.messages_sent}}</td>
+                <td>{{message.date}}</td>
+                {% endfor%}
+              </tr>
+            </tbody>
+          </table>
+          <!-- End Table with stripped rows -->
+          a
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

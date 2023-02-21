@@ -20,7 +20,7 @@ class Executive(models.Model):
     )
     full_name = models.CharField(max_length=255, )
     executive_image = models.ImageField(null=True, blank=True, default='gnaas.jfif')
-    phone = models.IntegerField( blank=True,null=True)
+    phone = models.CharField(max_length=10, blank=True,null=True)
     email = models.EmailField(max_length = 200,null=True, blank=True)
     program_of_study = models.CharField(max_length=255, blank=True,null=True)
     date_of_service = models.CharField(max_length=100, null=True, blank=True, choices=get_years())
@@ -288,6 +288,31 @@ class Program(models.Model):
     def __str__(self):
             return self.name
 
+
+# Create your models here.
+class SMS(models.Model):
+    sender_id = models.CharField(max_length=10)
+    title = models.CharField(max_length=100)
+    body = models.CharField(max_length=200)
+    date = models.DateTimeField(auto_now_add=True)
+    messages_sent = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return self.title
+
+
+class Document(models.Model):
+    ACADEMIC_YEAR = (
+          ('2021',2021),
+         ('2022',2022),
+          ('2023',2023),
+          
+    )
+    file_name = models.CharField(max_length=255)
+    academic_year =models.CharField(max_length=255, choices=ACADEMIC_YEAR)
+    file = models.FileField(upload_to='documents/')
+    def __str__(self):
+            return self.file_name
 
 
 
