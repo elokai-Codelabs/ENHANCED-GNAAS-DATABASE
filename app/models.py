@@ -177,6 +177,8 @@ class Fellowship(models.Model):
     location = models.CharField(max_length=100, blank=True,null=True)
     digital_address = models.CharField(max_length=100, blank=True,null=True)
     population = models.IntegerField(blank=True,null=True)
+    males = models.IntegerField(blank=True,null=True)
+    females = models.IntegerField(blank=True,null=True)
     union = models.CharField(max_length=200, blank=True,null=True, choices=UNION_NAME)
     zone = models.ForeignKey(Zone_Name, null=True, blank=True, on_delete=models.CASCADE)
     president = models.CharField(max_length=200,blank=True,null=True)

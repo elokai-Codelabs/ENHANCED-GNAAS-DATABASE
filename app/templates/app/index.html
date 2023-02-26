@@ -1,15 +1,14 @@
 {% extends 'app/base.html' %} {% load static %}
 <!--  -->
 {% block content %}
-<!-- all content that extends main.html will sit in here-->
 <section class="section dashboard">
   <div class="row">
     <!-- Left side columns -->
-    <div class="col-lg-12">
+    <div class="col-lg-8">
       <div class="row">
         <!-- Sales Card -->
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
               <h5
                 class="card-title"
@@ -33,9 +32,9 @@
         </div>
         <!-- End Sales Card -->
 
-        <!-- Sales Card -->
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <!-- Revenue Card -->
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
               <h5
                 class="card-title"
@@ -57,18 +56,13 @@
             </div>
           </div>
         </div>
-        <!-- End Sales Card -->
+        <!-- End Revenue Card -->
 
-        <!-- Sales Card -->
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <!-- Customers Card -->
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
-              <h5
-                class="card-title"
-                style="font-size: 20px; color: #012970; font-weight: 400"
-              >
-                CHAPLAINS/PCM
-              </h5>
+              <h5 class="card-title">CHAPLAINS/PCM</h5>
 
               <div class="d-flex align-items-center">
                 <div
@@ -83,11 +77,9 @@
             </div>
           </div>
         </div>
-        <!-- End Sales Card -->
-
-        <!-- Sales Card -->
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <!-- End Customers Card -->
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
               <h5
                 class="card-title"
@@ -95,6 +87,7 @@
               >
                 PATRONS
               </h5>
+
               <div class="d-flex align-items-center">
                 <div
                   class="card-icon rounded-circle d-flex align-items-center justify-content-center"
@@ -109,10 +102,8 @@
           </div>
         </div>
 
-        <!-- 2ND SET  -->
-
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
               <h5
                 class="card-title"
@@ -134,19 +125,16 @@
             </div>
           </div>
         </div>
-
-        <!--  -->
-        <!--  -->
-        <!--  -->
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
               <h5
                 class="card-title"
                 style="font-size: 20px; color: #012970; font-weight: 400"
               >
-                NURSING TRAINING COLLEGES
+                NURS. & MIDWIFERY COLLEGE
               </h5>
+
               <div class="d-flex align-items-center">
                 <div
                   class="card-icon rounded-circle d-flex align-items-center justify-content-center"
@@ -160,20 +148,16 @@
             </div>
           </div>
         </div>
-
-        <!--  -->
-        <!--  -->
-        <!--  -->
-
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
               <h5
                 class="card-title"
                 style="font-size: 20px; color: #012970; font-weight: 400"
               >
-                TEACHER TRAINING COLLEGES
+                COLLEGE OF EDUCATION
               </h5>
+
               <div class="d-flex align-items-center">
                 <div
                   class="card-icon rounded-circle d-flex align-items-center justify-content-center"
@@ -187,20 +171,16 @@
             </div>
           </div>
         </div>
-
-        <!--  -->
-        <!--  -->
-        <!--  -->
-
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
               <h5
                 class="card-title"
                 style="font-size: 20px; color: #012970; font-weight: 400"
               >
-                SECONDARY
+                SECONDARY SCHOOLS
               </h5>
+
               <div class="d-flex align-items-center">
                 <div
                   class="card-icon rounded-circle d-flex align-items-center justify-content-center"
@@ -214,10 +194,8 @@
             </div>
           </div>
         </div>
-
-        <!-- 3rd set start -->
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
               <h5
                 class="card-title"
@@ -225,6 +203,7 @@
               >
                 COMMITTEES
               </h5>
+
               <div class="d-flex align-items-center">
                 <div
                   class="card-icon rounded-circle d-flex align-items-center justify-content-center"
@@ -238,8 +217,8 @@
             </div>
           </div>
         </div>
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
               <h5
                 class="card-title"
@@ -247,6 +226,7 @@
               >
                 ALUMNI REPS
               </h5>
+
               <div class="d-flex align-items-center">
                 <div
                   class="card-icon rounded-circle d-flex align-items-center justify-content-center"
@@ -260,8 +240,8 @@
             </div>
           </div>
         </div>
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
               <h5
                 class="card-title"
@@ -269,6 +249,7 @@
               >
                 PROGRAMS/VISITATIONS
               </h5>
+
               <div class="d-flex align-items-center">
                 <div
                   class="card-icon rounded-circle d-flex align-items-center justify-content-center"
@@ -282,8 +263,8 @@
             </div>
           </div>
         </div>
-        <div class="col-xxl-3 col-md-6">
-          <div class="card info-card sales-card">
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
             <div class="card-body">
               <h5
                 class="card-title"
@@ -291,6 +272,7 @@
               >
                 EXECUTIVES
               </h5>
+
               <div class="d-flex align-items-center">
                 <div
                   class="card-icon rounded-circle d-flex align-items-center justify-content-center"
@@ -304,80 +286,260 @@
             </div>
           </div>
         </div>
-        <!-- 3rd set ends -->
 
-        <!--  -->
-        <!--  -->
-        <!--  -->
-        <!-- End Sales Card -->
+        <!-- Fellowship Population -->
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Zones Membership</h5>
 
-        <section class="section">
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="card">
-                <div class="card-body">
-                  <h5
-                    class="card-title"
-                    style="font-size: 20px; color: #012970; font-weight: 400"
-                  >
-                    NATIONAL EXECUTIVES
-                  </h5>
-                  <p>Details of National Executive</p>
-
-                  <!-- Table with stripped rows -->
-                  {% if nationals %}
-                  <table class="table datatable">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Portfolio</th>
-                        <th scope="col">Fellowship</th>
-                        <th scope="col">Contact</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <!--  -->
-                      {% for national in nationals %}
-                      <tr>
-                        <th scope="row">{{forloop.counter}}</th>
-                        <td>
-                          <img
-                            src="{% if national.executive_image %}{{national.executive_image.url}}{% endif %}"
-                            alt=""
-                            height="50"
-                            width="50"
-                            style="border-radius: 50%"
-                          />
-                        </td>
-                        <td>{{national.full_name}}</td>
-                        <td>{{national.position}}</td>
-                        <td>{{national.current_gnaas_fellowship}}</td>
-                        <td>{{national.phone}}</td>
-                      </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                  <!-- End Table with stripped rows -->
-                  <!--  -->
-                  {%else %}
-                  <h5 class="alert alert-primary ms-4 me-4">
-                    No Records Available
-                  </h5>
-
-                  {% endif%}
-                </div>
-              </div>
+              <!-- Bar Chart -->
+              <canvas id="barChart" style="max-height: 400px"></canvas>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new Chart(document.querySelector("#barChart"), {
+                    type: "bar",
+                    data: {
+                      labels: [
+                        "Central Ghana",
+                        "South Central",
+                        "Mid South",
+                        "Mid West",
+                        "North Mission",
+                        "Mid Central",
+                        "Ashanti South",
+                        "Mountain View",
+                        "Mid North",
+                        "Green View",
+                        "Mid South",
+                        "Accra City",
+                        "Pioneeer Ghana",
+                        "West Central",
+                        "South West",
+                        "Western North",
+                        "Volta Ghana",
+                        "East Ghana",
+                        "Meridian Ghana",
+                        "Eastern View",
+                        "Diamond Field",
+                      ],
+                      datasets: [
+                        {
+                          label: "Zones in both unions",
+                          data: [
+                            65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55,
+                            40, 65, 59, 80, 81, 56, 55, 40,
+                          ],
+                          backgroundColor: [
+                            "rgba(255, 99, 132, 0.2)",
+                            "rgba(255, 159, 64, 0.2)",
+                            "rgba(255, 205, 86, 0.2)",
+                            "rgba(75, 192, 192, 0.2)",
+                            "rgba(54, 162, 235, 0.2)",
+                            "rgba(153, 102, 255, 0.2)",
+                            "rgba(201, 203, 207, 0.2)",
+                            "rgba(255, 99, 132, 0.2)",
+                            "rgba(255, 159, 64, 0.2)",
+                            "rgba(255, 205, 86, 0.2)",
+                            "rgba(75, 192, 192, 0.2)",
+                            "rgba(54, 162, 235, 0.2)",
+                            "rgba(153, 102, 255, 0.2)",
+                            "rgba(201, 203, 207, 0.2)",
+                            "rgba(255, 99, 132, 0.2)",
+                            "rgba(255, 159, 64, 0.2)",
+                            "rgba(255, 205, 86, 0.2)",
+                            "rgba(75, 192, 192, 0.2)",
+                            "rgba(54, 162, 235, 0.2)",
+                            "rgba(153, 102, 255, 0.2)",
+                            "rgba(201, 203, 207, 0.2)",
+                          ],
+                          borderColor: [
+                            "rgb(255, 99, 132)",
+                            "rgb(255, 159, 64)",
+                            "rgb(255, 205, 86)",
+                            "rgb(75, 192, 192)",
+                            "rgb(54, 162, 235)",
+                            "rgb(153, 102, 255)",
+                            "rgb(201, 203, 207)",
+                            "rgb(255, 99, 132)",
+                            "rgb(255, 159, 64)",
+                            "rgb(255, 205, 86)",
+                            "rgb(75, 192, 192)",
+                            "rgb(54, 162, 235)",
+                            "rgb(153, 102, 255)",
+                            "rgb(201, 203, 207)",
+                            "rgb(255, 99, 132)",
+                            "rgb(255, 159, 64)",
+                            "rgb(255, 205, 86)",
+                            "rgb(75, 192, 192)",
+                            "rgb(54, 162, 235)",
+                            "rgb(153, 102, 255)",
+                            "rgb(201, 203, 207)",
+                          ],
+                          borderWidth: 1,
+                        },
+                      ],
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true,
+                        },
+                      },
+                    },
+                  });
+                });
+              </script>
+              <!-- End Bar CHart -->
             </div>
           </div>
-        </section>
+        </div>
+        <!-- Fellowship population -->
       </div>
     </div>
     <!-- End Left side columns -->
+
+    <!-- Right side columns -->
+    <div class="col-lg-4">
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">SMS Sent <span>| Recent</span></h5>
+
+          <div class="activity">
+            <div class="activity-item d-flex">
+              <div class="activite-label">Date</div>
+              <i
+                class="bi bi-circle-fill activity-badge text-success align-self-start"
+              ></i>
+              <div class="activity-content">Message title</div>
+            </div>
+            <!-- End activity item-->
+          </div>
+        </div>
+      </div>
+      <!-- End Recent Activity -->
+      <!-- Budget Report -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Union Based Population</h5>
+
+          <!-- Doughnut Chart -->
+          <canvas id="doughnutChart" style="max-height: 400px"></canvas>
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new Chart(document.querySelector("#doughnutChart"), {
+                type: "doughnut",
+                data: {
+                  labels: ["SGUC", "NGUC"],
+                  datasets: [
+                    {
+                      label: "My First Dataset",
+                      data: [300, 50],
+                      backgroundColor: [
+                        "rgb(255, 99, 132)",
+                        "rgb(54, 162, 235)",
+                      ],
+                      hoverOffset: 4,
+                    },
+                  ],
+                },
+              });
+            });
+          </script>
+          <!-- End Doughnut CHart -->
+        </div>
+      </div>
+      <!-- End Budget Report -->
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Gender Based Population</h5>
+
+          <!-- Pie Chart -->
+          <div id="pieChart2"></div>
+
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#pieChart2"), {
+                series: [44, 55],
+                chart: {
+                  height: 350,
+                  type: "pie",
+                  toolbar: {
+                    show: true,
+                  },
+                },
+                labels: ["Males", "Females"],
+              }).render();
+            });
+          </script>
+          <!-- End Pie Chart -->
+        </div>
+      </div>
+      <!-- Website Traffic -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Institutional Membership</h5>
+
+          <!-- Pie Chart -->
+          <div id="pieChart" style="min-height: 400px" class="echart"></div>
+
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              echarts.init(document.querySelector("#pieChart")).setOption({
+                title: {
+                  left: "center",
+                },
+                tooltip: {
+                  trigger: "item",
+                },
+                legend: {
+                  orient: "vertical",
+                  left: "left",
+                },
+                series: [
+                  {
+                    name: "Access From",
+                    type: "pie",
+                    radius: "50%",
+                    data: [
+                      {
+                        value: 1048,
+                        name: "Universities",
+                      },
+                      {
+                        value: 735,
+                        name: "NMTC",
+                      },
+                      {
+                        value: 580,
+                        name: "COE",
+                      },
+                      {
+                        value: 484,
+                        name: "SHS",
+                      },
+                    ],
+                    emphasis: {
+                      itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: "rgba(0, 0, 0, 0.5)",
+                      },
+                    },
+                  },
+                ],
+              });
+            });
+          </script>
+          <!-- End Pie Chart -->
+        </div>
+      </div>
+      <!-- End Website Traffic -->
+    </div>
+    <!-- End Right side columns -->
   </div>
 </section>
 {% endblock %}
-
-<!--  -->
-<!--  -->
+<!-- End #main -->

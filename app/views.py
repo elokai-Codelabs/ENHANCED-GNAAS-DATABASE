@@ -8,6 +8,8 @@ from .forms import ExecutiveForm,CommitteeForm,MembersForm, UnionsForm,ZoneForm,
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+
 from django.contrib import messages
 
 from .forms import CustomUserCreationForm
@@ -28,21 +30,35 @@ def index(request):
     # counting items in tables
     union_count = Union.objects.count()
     zone_count = Zone.objects.count()
+    # count institutions starts
     university_fellowship_count = Fellowship.objects.filter(fellowship_type='University').count()
-    nursing_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Secondary').count()
-    teacher_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Nursing Training').count()
-    shs_fellowship_count = Fellowship.objects.filter(fellowship_type='Teacher Training').count()
+    shs_fellowship_count = Fellowship.objects.filter(fellowship_type='Secondary').count()
+    nursing_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Nursing Training').count()
+    teacher_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Teacher Training').count()
+        # count institutions ends 
+        # gender based count in fellowship starts
+    # Count the number of males and females in Zone_Name model
+    males_count = Fellowship.objects.aggregate(males_count=Sum('males'))['males_count']
+    females_count = Fellowship.objects.aggregate(females_count=Sum('females'))['females_count']
+    print(males_count)
+        # gender based count in fellowship ends
     patrons_count = Patron.objects.count()
     chaplains_count = Chaplain.objects.count()
     alumni_rep_count = Alumni_rep.objects.count()
     committee_count = Committee.objects.count()
     program_count = Program.objects.count()
     executive_count = Executive.objects.count()
-
-
         # get all national executives
     nationals = Executive.objects.filter(leadership_level='National')
-    context = {'nationals':nationals,'union_count':union_count,'zone_count':zone_count,'university_fellowship_count':university_fellowship_count,'nursing_training_fellowship_count':nursing_training_fellowship_count,'teacher_training_fellowship_count':teacher_training_fellowship_count,'shs_fellowship_count':shs_fellowship_count,'committee_count':committee_count,'patrons_count':patrons_count,'chaplains_count':chaplains_count,'alumni_rep_count':alumni_rep_count,'program_count':program_count,'executive_count':executive_count}
+
+# FELLOWSHIP POPULATION CHART.JS
+    gender_list = ['Male', 'Female']
+    gender_count = [males_count,females_count]
+
+
+
+
+    context = {'nationals':nationals,'union_count':union_count,'zone_count':zone_count,'university_fellowship_count':university_fellowship_count,'nursing_training_fellowship_count':nursing_training_fellowship_count,'teacher_training_fellowship_count':teacher_training_fellowship_count,'shs_fellowship_count':shs_fellowship_count,'committee_count':committee_count,'patrons_count':patrons_count,'chaplains_count':chaplains_count,'alumni_rep_count':alumni_rep_count,'program_count':program_count,'executive_count':executive_count,'males_count':males_count, 'females_count':females_count,'gender_list':gender_list,'gender_count':gender_count}
 
     return render(request, 'app/index.html', context)
 
@@ -676,6 +692,10 @@ def show_sms(request):
     context = {'sms': sms}
     return render(request, 'app/show_sms.html',context)
 
+def sms_in_base(request):
+    context_sms = SMS.objects.all()    
+    context = {'context_sms': context_sms}
+    return context
 
 
 def sms_to_executive(request):

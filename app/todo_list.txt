@@ -1,0 +1,16 @@
+Graphs (PIE CHART)
+-for stats, unions, zones, chaplains etc as appeas on the dashboard
+-for institutions (ratio of shs, nmtc, coe, university)
+
+-LINE GRAPHS
+population over years 2022,2023,2024 etc as
+
+
+-ChatBot
+
+-Hosting the systems to clouds
+
+-Using ChatGPT API in Django
+
+
+-Sessions must expire after 10 minutes of inactive

@@ -7,7 +7,15 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Uploaded Files</h5>
-          <a href="{% url 'add-document'%}" class="btn btn-primary">
+          <p>
+            Expositions, programs, annual reports, financial statements, budgets
+            and other documents involving chabge of signaturies should be
+            uploaded for future references.
+          </p>
+          <a
+            href="{% url 'add-document'%}"
+            style="border: 2px solid blue; border-radius: 5px; padding: 10px"
+          >
             <i class="fa-regular fa-file-pdf"></i> Add File
           </a>
           <div class="binary_content">

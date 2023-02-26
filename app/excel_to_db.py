@@ -208,7 +208,7 @@ def read_fellowship_excel(request):
             # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
             zone = Zone_Name.objects.filter(name=row['ZONE']).first()
 
-            fellowship = Fellowship.objects.get_or_create(name=row['FELLOWSHIP_NAME'],fellowship_type=row['FELLOWSHIP_TYPE'],academic_year=row['ACADEMIC_YEAR'],location=row['LOCATION'],digital_address=row['DIGITAL_ADDRESS'], population=row['POPULATION'],union=row['UNION'],zone=zone,president=row['PRESIDENT'],president_contact=row['PRESIDENT_CONTACT'],secretary=row['SECRETARY'],secretary_contact=row['SECRETARY_CONTACT'],treasurer=row['TREASURER'],treasurer_contact=row['TREASURER_CONTACT'],chaplain_or_patron=row['CHAPLAIN_OR_PATRON'],chaplain_contact=row['CHAPLAIN_OR_PATRON_CONTACT'],)
+            fellowship = Fellowship.objects.get_or_create(name=row['FELLOWSHIP_NAME'],fellowship_type=row['FELLOWSHIP_TYPE'],academic_year=row['ACADEMIC_YEAR'],location=row['LOCATION'],digital_address=row['DIGITAL_ADDRESS'], population=row['POPULATION'],males=row['MALE'],females=row['FEMALE'],union=row['UNION'],zone=zone,president=row['PRESIDENT'],president_contact=row['PRESIDENT_CONTACT'],secretary=row['SECRETARY'],secretary_contact=row['SECRETARY_CONTACT'],treasurer=row['TREASURER'],treasurer_contact=row['TREASURER_CONTACT'],chaplain_or_patron=row['CHAPLAIN_OR_PATRON'],chaplain_contact=row['CHAPLAIN_OR_PATRON_CONTACT'],)
 
         messages.success(request,'Fellowships uploaded succesfully')
         # print('Successfully uploaded')

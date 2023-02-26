@@ -102,7 +102,40 @@
           <!-- End Search Icon-->
 
           <!-- End Messages Nav -->
+          <!-- SMS MESSAGES START -->
+          <li class="nav-item dropdown">
+            <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+              <i class="bi bi-chat-left-text"></i>
+              <span class="badge bg-success badge-number">3</span> </a
+            ><!-- End Messages Icon -->
 
+            <ul
+              class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages"
+            >
+              <li class="dropdown-header">You have sent 3 messages</li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <!-- loop begins here -->
+              {% for message in context_sms %}
+              <li class="message-item">
+                <a href="#">
+                  <div>
+                    <h4>{{message.title}}</h4>
+                    <p>{{message.body|slice:200}}</p>
+                    <p>{{message.date}}</p>
+                  </div>
+                </a>
+                <hr class="dropdown-divider" />
+              </li>
+              {% endfor %}
+            </ul>
+            <!-- End Messages Dropdown Items -->
+          </li>
+          <!-- End Messages Nav -->
+
+          <!-- SMS MESSAGES END -->
           <li class="nav-item dropdown pe-3">
             <a
               class="nav-link nav-profile d-flex align-items-center pe-0"
