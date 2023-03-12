@@ -7,21 +7,29 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Uploaded Files</h5>
-          <p>
-            Expositions, programs, annual reports, financial statements, budgets
-            and other documents involving chabge of signaturies should be
-            uploaded for future references.
-          </p>
           <a
             href="{% url 'add-document'%}"
             style="border: 2px solid blue; border-radius: 5px; padding: 10px"
           >
             <i class="fa-regular fa-file-pdf"></i> Add File
           </a>
+          <h5 class="card-title">
+            Add filter to show national, SGUC,NGUC Files they upload. Union
+            coordinators should upload all zonal programs to be used for future
+            reference
+          </h5>
+          <p>
+            Expositions, programs, annual reports, financial statements, budgets
+            and other documents involving chabge of signaturies should be
+            uploaded for future references.
+          </p>
+
           <div class="binary_content">
-            <!-- showing all the documents -->
-            {% for document in documents %}
+            <!-- showing results for all national files -->
             <br />
+            <h2 class="card-title">NATIONAL FILES</h2>
+            {% for document in national_doc %}
+
             <li>
               <a href="{{document.file.url}}">
                 <i class="fa-regular fa-file-pdf"></i> &nbsp; {{document.name}}
@@ -30,8 +38,44 @@
 
             {% empty %}
             <li>No documents found.</li>
-            <!-- showing all the documents -->
+
             {% endfor %}
+            <!-- showing results for all national files -->
+            <!-- ================== -->
+            <!-- showing results for all sguc files -->
+            <br />
+            <h2 class="card-title">SGUC FILES</h2>
+            {% for document in sguc_doc %}
+
+            <li>
+              <a href="{{document.file.url}}">
+                <i class="fa-regular fa-file-pdf"></i> &nbsp; {{document.name}}
+              </a>
+            </li>
+
+            {% empty %}
+            <li>No documents found.</li>
+
+            {% endfor %}
+            <!-- showing results for all sguc files -->
+
+            <!-- ================== -->
+            <!-- showing results for all sguc files -->
+            <br />
+            <h2 class="card-title">NGUC FILES</h2>
+            {% for document in nguc_doc %}
+
+            <li>
+              <a href="{{document.file.url}}">
+                <i class="fa-regular fa-file-pdf"></i> &nbsp; {{document.name}}
+              </a>
+            </li>
+
+            {% empty %}
+            <li>No documents found.</li>
+
+            {% endfor %}
+            <!-- showing results for all sguc files -->
           </div>
         </div>
       </div>

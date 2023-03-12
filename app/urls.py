@@ -40,12 +40,6 @@ urlpatterns = [
     path('edit-zone/<str:pk>/',views.edit_zone, name='edit-zone'),
     path('delete-zone/<str:pk>/',views.delete_zone, name='delete-zone'),
 
-       # ZONES NAMES routes
-    path('names/', views.show_zone_names, name='names'),
-    path('create-name/',views.create_zone_name, name='name'),
-    path('edit/<str:pk>/',views.edit_zone_name, name='edit-name'),
-    path('delete/<str:pk>/',views.delete_zone_name, name='delete-name'),
-
      # fellowship routes
     path('fellowships/', views.show_fellowships, name='fellowships'),
     path('create-fellowship/',views.create_fellowship, name='create-fellowship'),
@@ -85,7 +79,6 @@ urlpatterns = [
 
     # reading excel into database    
     path('read_executive/', excel_to_db.read_executive_excel, name='read_executives'),
-    path('read_zone/', excel_to_db.read_zone_excel, name='read_zones'),
     path('read_zone/details', excel_to_db.read_zone_details_excel, name='read_zone_details'),
     path('read_committee/', excel_to_db.read_committee_excel, name='read_committee'),
     path('read_committee_member/', excel_to_db.read_committee_member_excel, name='read_committee_member'),

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 # models
-from .models import Executive, Zone_Name,Zone, Committee,Committee_Member, Union,Fellowship, Position, Chaplain,Patron,Alumni_rep,Program
+from .models import Executive,Zone, Committee,Committee_Member, Union,Fellowship, Position, Chaplain,Patron,Alumni_rep,Program
 
 # import pandas
 import pandas as pd
@@ -33,26 +33,6 @@ def read_executive_excel(request):
 
 
 # upload zones excel
-def read_zone_excel(request):
-    
-    if request.method == 'POST':
-            
-
-        file = request.FILES.get("file")
-        excel_file = pd.read_excel(file)
-        df = pd.DataFrame(excel_file)
-
-        for index,row in df.iterrows():
-            # if you have a foreign key for a field, you get it first
-            # we are filtering where position is equal to where in the column
-            # print('message',row['FULL NAME'],row['PHONE'],row['EMAIL'])
-
-            zones = Zone_Name.objects.get_or_create(name=row['ZONE_FULL_NAME'])
-
-        messages.success(request,'Zones uploaded succesfully')
-        # print('Successfully uploaded')
-
-        return redirect('names')
 
 # upload zones excel
 def read_zone_details_excel(request):

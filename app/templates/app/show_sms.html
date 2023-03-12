@@ -10,12 +10,22 @@
           <p>List of SMS Sent</p>
           <div class="binary_content">
             <a href="{% url 'sms_to_executive' %}" class="btn btn-primary">
-              <i class="bi bi-send"></i> &nbsp; Send SMS to Executives
+              <i class="bi bi-send"></i> &nbsp; Send SMS to all Executives
             </a>
             <!-- Send SMS to Fellowship throught their presients -->
             <a href="{% url 'sms_to_fellowship' %}" class="btn btn-primary">
-              <i class="bi bi-send"></i> &nbsp; Send SMS to Fellowships
+              <i class="bi bi-send"></i> &nbsp; Send SMS to all Fellowships
+              Presidents
             </a>
+            <!-- <a href="" class="btn btn-primary">
+              <i class="bi bi-send"></i> &nbsp; Send SMS to SGUC Fellowships
+              Presidents
+            </a> -->
+            <!-- Send SMS to Fellowship throught their presients -->
+            <!-- <a href="" class="btn btn-primary">
+              <i class="bi bi-send"></i> &nbsp; Send SMS to NGUC Fellowships
+              Presidents
+            </a> -->
           </div>
           <!-- Table with stripped rows -->
           <table class="table datatable">
@@ -39,7 +49,6 @@
             </tbody>
           </table>
           <!-- End Table with stripped rows -->
-          a
         </div>
       </div>
     </div>

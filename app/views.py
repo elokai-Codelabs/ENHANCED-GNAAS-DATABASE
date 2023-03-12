@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect
 # models
-from .models import Executive,Committee,Committee_Member, Union,Zone,Fellowship, Position, Chaplain,Patron,Alumni_rep,Program, Zone_Name, SMS, Document
+from .models import Executive,Committee,Committee_Member, Union,Zone,Fellowship, Position, Chaplain,Patron,Alumni_rep,Program,  SMS, Document
 # forms
-from .forms import ExecutiveForm,CommitteeForm,MembersForm, UnionsForm,ZoneForm,FellowshipForm, PositionsForm,ChaplainForm,PatronForm,AlumniRepForm,ProgramForm,ZoneNameForm
+from .forms import ExecutiveForm,CommitteeForm,MembersForm, UnionsForm,ZoneForm,FellowshipForm, PositionsForm,ChaplainForm,PatronForm,AlumniRepForm,ProgramForm
 
 # User authentication start 
 from django.contrib.auth import login, authenticate, logout
@@ -23,6 +23,9 @@ from datetime import datetime
 
 # IMPORT REQUESTS
 import requests 
+# count
+from django.db.models import Count
+
 
 # Create your views here.
 @login_required(login_url='login')
@@ -36,12 +39,7 @@ def index(request):
     nursing_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Nursing Training').count()
     teacher_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Teacher Training').count()
         # count institutions ends 
-        # gender based count in fellowship starts
-    # Count the number of males and females in Zone_Name model
-    males_count = Fellowship.objects.aggregate(males_count=Sum('males'))['males_count']
-    females_count = Fellowship.objects.aggregate(females_count=Sum('females'))['females_count']
-    print(males_count)
-        # gender based count in fellowship ends
+            
     patrons_count = Patron.objects.count()
     chaplains_count = Chaplain.objects.count()
     alumni_rep_count = Alumni_rep.objects.count()
@@ -52,13 +50,22 @@ def index(request):
     nationals = Executive.objects.filter(leadership_level='National')
 
 # FELLOWSHIP POPULATION CHART.JS
+  # gender based count in fellowship starts
+    # Count the number of males and females in Fellowship model
+    males_count = Fellowship.objects.aggregate(males_count=Sum('males'))['males_count']
+    females_count = Fellowship.objects.aggregate(females_count=Sum('females'))['females_count']
     gender_list = ['Male', 'Female']
     gender_count = [males_count,females_count]
 
+# UNION BASED POPULATION
+    count_sguc = Fellowship.objects.filter(union='Southern Ghana Union').aggregate(Count('id'))['id__count']
+    count_nguc = Fellowship.objects.filter(union='Northern Ghana Union').aggregate(Count('id'))['id__count']
+    
+
+# zones names
 
 
-
-    context = {'nationals':nationals,'union_count':union_count,'zone_count':zone_count,'university_fellowship_count':university_fellowship_count,'nursing_training_fellowship_count':nursing_training_fellowship_count,'teacher_training_fellowship_count':teacher_training_fellowship_count,'shs_fellowship_count':shs_fellowship_count,'committee_count':committee_count,'patrons_count':patrons_count,'chaplains_count':chaplains_count,'alumni_rep_count':alumni_rep_count,'program_count':program_count,'executive_count':executive_count,'males_count':males_count, 'females_count':females_count,'gender_list':gender_list,'gender_count':gender_count}
+    context = {'nationals':nationals,'union_count':union_count,'zone_count':zone_count,'university_fellowship_count':university_fellowship_count,'nursing_training_fellowship_count':nursing_training_fellowship_count,'teacher_training_fellowship_count':teacher_training_fellowship_count,'shs_fellowship_count':shs_fellowship_count,'committee_count':committee_count,'patrons_count':patrons_count,'chaplains_count':chaplains_count,'alumni_rep_count':alumni_rep_count,'program_count':program_count,'executive_count':executive_count,'males_count':males_count, 'females_count':females_count,'gender_list':gender_list,'gender_count':gender_count,'count_sguc':count_sguc,'count_nguc':count_nguc}
 
     return render(request, 'app/index.html', context)
 
@@ -442,50 +449,50 @@ def delete_position(request,pk):
         return redirect('positions')
     return redirect('positions')
 
-# =================ZONE NAMES START==================
-@login_required(login_url='login')
-def show_zone_names(request):
-    zones = Zone_Name.objects.all()
-    context = {'zones': zones}
-    return render(request, 'app/show_zone_names.html', context)
+# # =================ZONE NAMES START==================
+# @login_required(login_url='login')
+# def show_zone_names(request):
+#     zones = Zone_Name.objects.all()
+#     context = {'zones': zones}
+#     return render(request, 'app/show_zone_names.html', context)
 
 
-@login_required(login_url='login')
-def create_zone_name(request):
-    form = ZoneNameForm()
+# @login_required(login_url='login')
+# def create_zone_name(request):
+#     form = ZoneNameForm()
 
-    if request.method == 'POST':
-        form = ZoneNameForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('names')
-    context = {'forms': form}
-    return render(request, 'app/create_zone_names.html', context)
+#     if request.method == 'POST':
+#         form = ZoneNameForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('names')
+#     context = {'forms': form}
+#     return render(request, 'app/create_zone_names.html', context)
 
 
-@login_required(login_url='login')
-def edit_zone_name(request,pk):
-    zones = Zone_Name.objects.get(pk=pk)
-    form = ZoneNameForm(instance=zones)
+# @login_required(login_url='login')
+# def edit_zone_name(request,pk):
+#     zones = Zone_Name.objects.get(pk=pk)
+#     form = ZoneNameForm(instance=zones)
     
 
-    if request.method == 'POST':
-        form = ZoneNameForm(request.POST, request.FILES,instance=zones)
-        if form.is_valid():
-            form.save()
-            return redirect('names')
-    context = {'forms': form}
-    return render(request, 'app/create_zone_names.html', context)
+#     if request.method == 'POST':
+#         form = ZoneNameForm(request.POST, request.FILES,instance=zones)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('names')
+#     context = {'forms': form}
+#     return render(request, 'app/create_zone_names.html', context)
 
 
-@login_required(login_url='login')
-def delete_zone_name(request,pk):
-    zones = Zone_Name.objects.get(id=pk)
+# @login_required(login_url='login')
+# def delete_zone_name(request,pk):
+#     zones = Zone_Name.objects.get(id=pk)
 
-    if request.method == 'POST':
-        zones.delete()
-        return redirect('names')
-    return redirect('names')
+#     if request.method == 'POST':
+#         zones.delete()
+#         return redirect('names')
+#     return redirect('names')
 
 
 
@@ -787,8 +794,11 @@ def sms_to_fellowships(request):
     return render(request, 'app/sms_to_executive.html',context)
 
 def show_documents(request):
-    documents = Document.objects.all()
-    context = {'documents': documents}
+    # documents = Document.objects.all()
+    national_doc = Document.objects.filter(status__iexact="National")
+    sguc_doc = Document.objects.filter(status__iexact="SGUC")
+    nguc_doc = Document.objects.filter(status__iexact="NGUC")
+    context = {'national_doc':national_doc,'sguc_doc':sguc_doc,'nguc_doc':nguc_doc}
     return render(request, 'app/show_document.html', context)
 
 

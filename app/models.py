@@ -39,9 +39,7 @@ class Executive(models.Model):
         return self.full_name
 
 
-class Zone_Name(models.Model):
-    name = models.CharField(max_length=255)
-    created = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         self.name = self.name.upper()
@@ -165,6 +163,30 @@ class Fellowship(models.Model):
         ('Nursing Training', 'Nursing Training'),
         ('Teacher Training ', 'Teacher Training'),    
     )
+
+    ZONE_NAMES = (
+       ( "Central Ghana","Central Ghana"),
+        ("South Central","South Central"),
+       ( "Mid South","Mid South"),
+       ( "Mid West","Mid West"),
+        ("North Mission","North Mission"),
+       ( "Mid Central","Mid Central"),
+       ( "Ashanti South","Ashanti South"),
+        ("Mountain View","Mountain View"),
+       ( "Mid North","Mid North"),
+       ( "Green View","Green View"),
+       ( "Mid South","Mid South"),
+        ("Accra City","Accra City"),
+        ("Pioneeer Ghana","Pioneeer Ghana"),
+        ("West Central","West Central"),
+       ( "South West","South West"),
+       ( "Western North","Western North"),
+       ( "Volta Ghana","Volta Ghana"),
+        ("East Ghana","East Ghana"),
+        ("Meridian Ghana","Meridian Ghana"),
+       ( "Eastern View","Eastern View"),
+       ( "Diamond Field","Diamond Field"),
+    )
     def get_years() -> tuple:
         BASE_YEAR = 2021
         CURRENT_YEAR = datetime.now().year
@@ -180,7 +202,7 @@ class Fellowship(models.Model):
     males = models.IntegerField(blank=True,null=True)
     females = models.IntegerField(blank=True,null=True)
     union = models.CharField(max_length=200, blank=True,null=True, choices=UNION_NAME)
-    zone = models.ForeignKey(Zone_Name, null=True, blank=True, on_delete=models.CASCADE)
+    zone = models.CharField(max_length=200, blank=True,null=True, choices=ZONE_NAMES)
     president = models.CharField(max_length=200,blank=True,null=True)
     president_contact = models.IntegerField(blank=True,null=True)
     secretary = models.CharField(max_length=200,blank=True,null=True)
@@ -202,6 +224,29 @@ class Patron(models.Model):
         ('Southern Ghana Union', 'Southern Ghana Union'),
         ('Northern Ghana Union','Northern Ghana Union'),    
     )
+    ZONE_NAMES = (
+       ( "Central Ghana","Central Ghana"),
+        ("South Central","South Central"),
+       ( "Mid South","Mid South"),
+       ( "Mid West","Mid West"),
+        ("North Mission","North Mission"),
+       ( "Mid Central","Mid Central"),
+       ( "Ashanti South","Ashanti South"),
+        ("Mountain View","Mountain View"),
+       ( "Mid North","Mid North"),
+       ( "Green View","Green View"),
+       ( "Mid South","Mid South"),
+        ("Accra City","Accra City"),
+        ("Pioneeer Ghana","Pioneeer Ghana"),
+        ("West Central","West Central"),
+       ( "South West","South West"),
+       ( "Western North","Western North"),
+       ( "Volta Ghana","Volta Ghana"),
+        ("East Ghana","East Ghana"),
+        ("Meridian Ghana","Meridian Ghana"),
+       ( "Eastern View","Eastern View"),
+       ( "Diamond Field","Diamond Field"),
+    )
     def get_years() -> tuple:
         BASE_YEAR = 2021
         CURRENT_YEAR = datetime.now().year
@@ -213,7 +258,7 @@ class Patron(models.Model):
     phone = models.CharField(max_length=50)
     email = models.EmailField(max_length=100)
     fellowship = models.CharField(max_length=150)
-    zone = models.ForeignKey(Zone_Name, null=True, blank=True, on_delete=models.CASCADE)
+    zone = models.CharField(max_length=100, choices=ZONE_NAMES)
     union = models.CharField(max_length=100, choices=UNION_NAME)
 
     def __str__(self):
@@ -225,6 +270,30 @@ class Chaplain(models.Model):
         ('Northern Ghana Union','Northern Ghana Union'),
         
     )
+    ZONE_NAMES = (
+       ( "Central Ghana","Central Ghana"),
+        ("South Central","South Central"),
+       ( "Mid South","Mid South"),
+       ( "Mid West","Mid West"),
+        ("North Mission","North Mission"),
+       ( "Mid Central","Mid Central"),
+       ( "Ashanti South","Ashanti South"),
+        ("Mountain View","Mountain View"),
+       ( "Mid North","Mid North"),
+       ( "Green View","Green View"),
+       ( "Mid South","Mid South"),
+        ("Accra City","Accra City"),
+        ("Pioneeer Ghana","Pioneeer Ghana"),
+        ("West Central","West Central"),
+       ( "South West","South West"),
+       ( "Western North","Western North"),
+       ( "Volta Ghana","Volta Ghana"),
+        ("East Ghana","East Ghana"),
+        ("Meridian Ghana","Meridian Ghana"),
+       ( "Eastern View","Eastern View"),
+       ( "Diamond Field","Diamond Field"),
+    )
+  
     def get_years() -> tuple:
         BASE_YEAR = 2021
         CURRENT_YEAR = datetime.now().year
@@ -236,7 +305,7 @@ class Chaplain(models.Model):
     phone = models.IntegerField(null=True, blank=True)
     email = models.EmailField(max_length=100)
     fellowship = models.CharField(max_length=150)
-    zone = models.ForeignKey(Zone_Name, null=True, blank=True, on_delete=models.CASCADE)
+    zone = models.CharField(max_length=100, choices=ZONE_NAMES)
     union = models.CharField(max_length=100, choices=UNION_NAME)
     
     def __str__(self):
@@ -247,6 +316,29 @@ class Alumni_rep(models.Model):
         ('Southern Ghana Union', 'Southern Ghana Union'),
         ('Northern Ghana Union','Northern Ghana Union'),
         
+    )
+    ZONE_NAMES = (
+       ( "Central Ghana","Central Ghana"),
+        ("South Central","South Central"),
+       ( "Mid South","Mid South"),
+       ( "Mid West","Mid West"),
+        ("North Mission","North Mission"),
+       ( "Mid Central","Mid Central"),
+       ( "Ashanti South","Ashanti South"),
+        ("Mountain View","Mountain View"),
+       ( "Mid North","Mid North"),
+       ( "Green View","Green View"),
+       ( "Mid South","Mid South"),
+        ("Accra City","Accra City"),
+        ("Pioneeer Ghana","Pioneeer Ghana"),
+        ("West Central","West Central"),
+       ( "South West","South West"),
+       ( "Western North","Western North"),
+       ( "Volta Ghana","Volta Ghana"),
+        ("East Ghana","East Ghana"),
+        ("Meridian Ghana","Meridian Ghana"),
+       ( "Eastern View","Eastern View"),
+       ( "Diamond Field","Diamond Field"),
     )
     def get_years() -> tuple:
         BASE_YEAR = 2021
@@ -261,7 +353,7 @@ class Alumni_rep(models.Model):
     gnaas_fellowship = models.CharField(max_length=150)
     local_church = models.CharField(max_length=150)
     occupation = models.CharField(max_length=150)
-    zone = models.ForeignKey(Zone_Name, null=True, blank=True, on_delete=models.CASCADE)
+    zone = models.CharField(max_length=100, choices=UNION_NAME)
     union = models.CharField(max_length=100, choices=UNION_NAME)
 
     def __str__(self):
@@ -308,13 +400,18 @@ class Document(models.Model):
           ('2021',2021),
          ('2022',2022),
           ('2023',2023),
-          
+    )
+    PROGRAM_LEVEL = (
+          ('National','National'),
+         ('SGUC','SGUC'),
+          ('NGUC','NGUC'),
     )
     name = models.CharField(max_length=255)
     academic_year =models.CharField(max_length=255, choices=ACADEMIC_YEAR)
+    status =models.CharField(max_length=255, choices=PROGRAM_LEVEL)
     file = models.FileField(upload_to='documents/')
     def __str__(self):
-            return self.file_name
+            return self.name
 
 
 

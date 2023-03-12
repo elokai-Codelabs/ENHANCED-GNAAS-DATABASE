@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import Executive,Committee,Committee_Member,Union,Zone, Fellowship,Patron,Chaplain,Alumni_rep, Position,Program,Zone_Name
+from .models import Executive,Committee,Committee_Member,Union,Zone, Fellowship,Patron,Chaplain,Alumni_rep, Position,Program
 # USER AUTHENTICATION
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -128,18 +128,6 @@ class PositionsForm(ModelForm):
        
     def __init__(self, *args, **kwargs):
         super(PositionsForm, self).__init__(*args, **kwargs)
-        # or this super().__init__(*args, **kwargs)
-
-        for name, field in self.fields.items():
-            field.widget.attrs.update({'class':'form-control'})
-
-class ZoneNameForm(ModelForm):
-    class Meta:
-        model = Zone_Name
-        fields ='__all__'
-       
-    def __init__(self, *args, **kwargs):
-        super(ZoneNameForm, self).__init__(*args, **kwargs)
         # or this super().__init__(*args, **kwargs)
 
         for name, field in self.fields.items():
