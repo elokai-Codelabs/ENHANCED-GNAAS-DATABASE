@@ -8,13 +8,20 @@ from .forms import ExecutiveForm,CommitteeForm,MembersForm, UnionsForm,ZoneForm,
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
-
+from django.db.models import Sum, Count
 from django.contrib import messages
-
+from django.http import HttpResponse
 from .forms import CustomUserCreationForm
 # User authentication end 
+from django.core.exceptions import ObjectDoesNotExist
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseServerError
 
 # IMPORT PANDAS
 import pandas as pd
@@ -24,327 +31,467 @@ from datetime import datetime
 # IMPORT REQUESTS
 import requests 
 # count
-from django.db.models import Count
 
 
-# Create your views here.
-@login_required(login_url='login')
-def index(request):
-    # counting items in tables
-    union_count = Union.objects.count()
-    zone_count = Zone.objects.count()
-    # count institutions starts
-    university_fellowship_count = Fellowship.objects.filter(fellowship_type='University').count()
-    shs_fellowship_count = Fellowship.objects.filter(fellowship_type='Secondary').count()
-    nursing_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Nursing Training').count()
-    teacher_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Teacher Training').count()
-        # count institutions ends 
-            
-    patrons_count = Patron.objects.count()
-    chaplains_count = Chaplain.objects.count()
-    alumni_rep_count = Alumni_rep.objects.count()
-    committee_count = Committee.objects.count()
-    program_count = Program.objects.count()
-    executive_count = Executive.objects.count()
-        # get all national executives
-    nationals = Executive.objects.filter(leadership_level='National')
-
-# FELLOWSHIP POPULATION CHART.JS
-  # gender based count in fellowship starts
-    # Count the number of males and females in Fellowship model
-    males_count = Fellowship.objects.aggregate(males_count=Sum('males'))['males_count']
-    females_count = Fellowship.objects.aggregate(females_count=Sum('females'))['females_count']
-    gender_list = ['Male', 'Female']
-    gender_count = [males_count,females_count]
-
-# UNION BASED POPULATION
-    count_sguc = Fellowship.objects.filter(union='Southern Ghana Union').aggregate(Count('id'))['id__count']
-    count_nguc = Fellowship.objects.filter(union='Northern Ghana Union').aggregate(Count('id'))['id__count']
-    
-
-# zones names
 
 
-    context = {'nationals':nationals,'union_count':union_count,'zone_count':zone_count,'university_fellowship_count':university_fellowship_count,'nursing_training_fellowship_count':nursing_training_fellowship_count,'teacher_training_fellowship_count':teacher_training_fellowship_count,'shs_fellowship_count':shs_fellowship_count,'committee_count':committee_count,'patrons_count':patrons_count,'chaplains_count':chaplains_count,'alumni_rep_count':alumni_rep_count,'program_count':program_count,'executive_count':executive_count,'males_count':males_count, 'females_count':females_count,'gender_list':gender_list,'gender_count':gender_count,'count_sguc':count_sguc,'count_nguc':count_nguc}
-
-    return render(request, 'app/index.html', context)
 
 
-# 
-# ============USER AUTHENTICATION , LOGIN AND LOGOUT==========
-# ============================================================
-def loginUser(request):
-    # prevent already loged in users from seing login page
-   
-    
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
 
+class IndexView(LoginRequiredMixin, View):
+    login_url = 'login'
+    template_name = 'app/index.html'
 
-        user = authenticate(request, username=username, password=password)
+    def get(self, request):
+        try:
+            # counting items in tables
+            union_count = Union.objects.count()
+            zone_count = Zone.objects.count()
 
-        if user is not None:
-            login(request, user)
-            messages.success(request,'User succesfully logged in')
+            # count institutions starts
+            university_fellowship_count = Fellowship.objects.filter(fellowship_type='University').count()
+            shs_fellowship_count = Fellowship.objects.filter(fellowship_type='Secondary').count()
+            nursing_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Nursing Training').count()
+            teacher_training_fellowship_count = Fellowship.objects.filter(fellowship_type='Teacher Training').count()
+            # count institutions ends 
+
+            patrons_count = Patron.objects.count()
+            chaplains_count = Chaplain.objects.count()
+            alumni_rep_count = Alumni_rep.objects.count()
+            committee_count = Committee.objects.count()
+            program_count = Program.objects.count()
+            executive_count = Executive.objects.count()
+
+            # get all national executives
+            nationals = Executive.objects.filter(leadership_level='National')
+
+            # FELLOWSHIP POPULATION CHART.JS
+            # gender based count in fellowship starts
+            # Count the number of males and females in Fellowship model
+            males_count = Fellowship.objects.aggregate(males_count=Sum('males'))['males_count']
+            females_count = Fellowship.objects.aggregate(females_count=Sum('females'))['females_count']
+            gender_list = ['Male', 'Female']
+            gender_count = [males_count,females_count]
+
+            # UNION BASED POPULATION
+            count_sguc = Fellowship.objects.filter(union='Southern Ghana Union').aggregate(Count('id'))['id__count']
+            count_nguc = Fellowship.objects.filter(union='Northern Ghana Union').aggregate(Count('id'))['id__count']
+
+            context = {'nationals':nationals,'union_count':union_count,'zone_count':zone_count,'university_fellowship_count':university_fellowship_count,'nursing_training_fellowship_count':nursing_training_fellowship_count,'teacher_training_fellowship_count':teacher_training_fellowship_count,'shs_fellowship_count':shs_fellowship_count,'committee_count':committee_count,'patrons_count':patrons_count,'chaplains_count':chaplains_count,'alumni_rep_count':alumni_rep_count,'program_count':program_count,'executive_count':executive_count,'males_count':males_count, 'females_count':females_count,'gender_list':gender_list,'gender_count':gender_count,'count_sguc':count_sguc,'count_nguc':count_nguc}
+
+            return render(request, self.template_name, context)
+
+        except Exception as e:
+            # Handle any exceptions here
+            messages.error(request, str(e))
             return redirect('index')
-        else:
-            messages.error(request,'Invalid username or password')
-    context = {}
-    return render(request,'app/login.html', context)   
+    
+class LoginView(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('index')
+        context = {}
+        return render(request, 'app/login.html', context)
+    
+    def post(self, request):
+        try:
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                messages.success(request,'User succesfully logged in')
+                return redirect('index')
+            else:
+                messages.error(request,'Invalid username or password')
+                return redirect('login')
+        except Exception as e:
+            messages.error(request, f'Error: {str(e)}')
+            return redirect('login')
+        
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
 
 
-def logoutUser(request):
-    logout(request)
-    return redirect('login')
 
 
-@login_required(login_url='login')
-def show_executive(request):
-    query = request.GET.get('q') or ''
-    if query == '':
-        executives = Executive.objects.all()
-    else:
-        executives = Executive.objects.filter(leadership_level=query)
-    context = {'executives': executives}
-    return render(request, 'app/show_executive.html', context)
+class ShowExecutiveView(LoginRequiredMixin, View):
+    login_url = 'login'
+    def get(self, request):
+        try:
+            query = request.GET.get('q') or ''
+            if query == '':
+                executives = Executive.objects.all()
+            else:
+                executives = Executive.objects.filter(leadership_level=query)
+            context = {'executives': executives}
+            return render(request, 'app/show_executive.html', context)
+        except Exception as e:
+            # Handle the error appropriately
+            return HttpResponse('An error occurred: {}'.format(str(e)))
 
-# displaying executive based on page indicator does not work because 
-# I need to figure it out again
+class CreateExecutiveView(LoginRequiredMixin, View):
+    login_url='login'
+    def get(self, request):
+        try:
+            form = ExecutiveForm()
+            context = {'forms': form}
+            return render(request, 'app/create_executive.html', context)
+        except Exception as e:
+            # Handle the error appropriately
+            return HttpResponse('An error occurred: {}'.format(str(e)))
 
-# =================================================================
-# ============  CREATING EXECUTIVE ============================
-@login_required(login_url='login')
-def create_executive(request):
-    form = ExecutiveForm()
+    def post(self, request):
+        try:
+            form = ExecutiveForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                return redirect('executives')
+            context = {'forms': form}
+            return render(request, 'app/create_executive.html', context)
+        except Exception as e:
+            # Handle the error appropriately
+            return HttpResponse('An error occurred: {}'.format(str(e)))
 
-    if request.method == 'POST':
-        form = ExecutiveForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
+class EditExecutiveView(LoginRequiredMixin,View):
+    login_url='login'
+    def get(self, request, pk):
+        try:
+            executive = Executive.objects.get(pk=pk)
+            form = ExecutiveForm(instance=executive)
+            context = {'forms': form}
+            return render(request, 'app/create_executive.html', context)
+        except ObjectDoesNotExist:
+            # Handle the error if the Executive object with the given pk does not exist
+            return HttpResponse('Executive object does not exist')
+        except Exception as e:
+            # Handle other errors appropriately
+            return HttpResponse('An error occurred: {}'.format(str(e)))
+
+    def post(self, request, pk):
+        try:
+            executive = Executive.objects.get(pk=pk)
+            form = ExecutiveForm(request.POST, request.FILES, instance=executive)
+            if form.is_valid():
+                form.save()
+                return redirect('executives')
+            context = {'forms': form}
+            return render(request, 'app/create_executive.html', context)
+        except Exception as e:
+            # Handle the error appropriately
+            return HttpResponse('An error occurred: {}'.format(str(e)))
+
+class DeleteExecutiveView(LoginRequiredMixin, View):
+    login_url='login'
+    def post(self, request, pk):
+        try:
+            executive = Executive.objects.get(pk=pk)
+            executive.delete()
             return redirect('executives')
-    context = {'forms': form}
-    return render(request, 'app/create_executive.html', context)
-
-@login_required(login_url='login')
-def edit_executive(request,pk):
-    executive = Executive.objects.get(pk=pk)
-    form = ExecutiveForm(instance=executive)
-    
-
-    if request.method == 'POST':
-        form = ExecutiveForm(request.POST, request.FILES,instance=executive)
-        if form.is_valid():
-            form.save()
-            return redirect('index')
-    context = {'forms': form}
-    return render(request, 'app/create_executive.html', context)
+        except ObjectDoesNotExist:
+            # Handle the error if the Executive object with the given pk does not exist
+            return HttpResponse('Executive object does not exist')
+        except Exception as e:
+            # Handle other errors appropriately
+            return HttpResponse('An error occurred: {}'.format(str(e)))
 
 
-@login_required(login_url='login')
-def delete_executive(request,pk):
-    executive = Executive.objects.get(pk=pk)
-
-    if request.method == 'POST':
-        executive.delete()
-        return redirect('executives')
-    return redirect('executives')
-    
 # =================================================================
 # ============  CREATING COMMITEE ============================
 
-@login_required(login_url='login')
-def show_committee(request):
-    committees = Committee.objects.all()
-    context = {'committees': committees}
-    return render(request, 'app/show_committees.html', context)
+# @method_decorator(login_required(login_url='login'), name='dispatch')
+class ShowCommitteeView(LoginRequiredMixin,View):
+    login_url='login'
+    def get(self, request):
+        try:
+            committees = Committee.objects.all()
+            context = {'committees': committees}
+            return render(request, 'app/show_committees.html', context)
+        except Exception:
+            return HttpResponseServerError()
 
 
-@login_required(login_url='login')
-def create_committee(request):
-    form = CommitteeForm()
+# @method_decorator(login_required(login_url='login'), name='dispatch')
+class CreateCommitteeView(LoginRequiredMixin,View):
+    login_url='login'
+    def get(self, request):
+        try:
+            form = CommitteeForm()
+            context = {'forms': form}
+            return render(request, 'app/create_committee.html', context)
+        except Exception:
+            return HttpResponseServerError()
 
-    if request.method == 'POST':
-        form = CommitteeForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
+    def post(self, request):
+        try:
+            form = CommitteeForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                return redirect('committees')
+            else:
+                context = {'forms': form}
+                return render(request, 'app/create_committee.html', context)
+        except Exception:
+            return HttpResponseServerError()
+
+
+# @method_decorator(login_required(login_url='login'), name='dispatch')
+class EditCommitteeView(LoginRequiredMixin,View):
+    login_url='login'
+    def get(self, request, pk):
+        try:
+            committee = get_object_or_404(Committee, pk=pk)
+            form = CommitteeForm(instance=committee)
+            context = {'forms': form}
+            return render(request, 'app/create_committee.html', context)
+        except Exception:
+            return HttpResponseServerError()
+
+    def post(self, request, pk):
+        try:
+            committee = get_object_or_404(Committee, pk=pk)
+            form = CommitteeForm(request.POST, request.FILES, instance=committee)
+            if form.is_valid():
+                form.save()
+                return redirect('committees')
+            else:
+                context = {'forms': form}
+                return render(request, 'app/create_committee.html', context)
+        except Exception:
+            return HttpResponseServerError()
+
+
+# @method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteCommitteeView(LoginRequiredMixin,View):
+    login_url='login'
+    def post(self, request, pk):
+        try:
+            committee = get_object_or_404(Committee, pk=pk)
+            committee.delete()
             return redirect('committees')
-    context = {'forms': form}
-    return render(request, 'app/create_committee.html', context)
+        except Exception:
+            return HttpResponseServerError()
 
-
-@login_required(login_url='login')
-def edit_committee(request,pk):
-    committee = Committee.objects.get(pk=pk)
-    form = CommitteeForm(instance=committee)
-    
-
-    if request.method == 'POST':
-        form = CommitteeForm(request.POST, request.FILES,instance=committee)
-        if form.is_valid():
-            form.save()
-            return redirect('committees')
-    context = {'forms': form}
-    return render(request, 'app/create_committee.html', context)
-
-
-@login_required(login_url='login')
-def delete_committee(request,pk):
-    committee = Committee.objects.get(pk=pk)
-
-    if request.method == 'POST':
-        committee.delete()
+    def get(self, request, pk):
         return redirect('committees')
-    return redirect('committees')
-
 
 
 
 # =================================================================
 # ============ END CREATING COMMITEE MEMBERS=======================
 
-@login_required(login_url='login')
-def create_member(request):
-    form = MembersForm()
+class CreateMemberView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    template_name = 'app/create_members.html'
 
-    if request.method == 'POST':
+    def get(self, request):
+        form = MembersForm()
+        context = {'forms': form}
+        return render(request, self.template_name, context)
+
+    def post(self, request):
         form = MembersForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('members')
+        except Exception as e:
+            print(str(e))
+        context = {'forms': form}
+        return render(request, self.template_name, context)
+
+class ShowMembersView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    template_name = 'app/show_members.html'
+
+    def get(self, request):
+        members = Committee_Member.objects.all()
+        context = {'members': members}
+        return render(request, self.template_name, context)
+
+class EditMemberView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    template_name = 'app/create_members.html'
+
+    def get(self, request, pk):
+        members = Committee_Member.objects.get(pk=pk)
+        form = MembersForm(instance=members)
+        context = {'forms': form}
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        members = Committee_Member.objects.get(pk=pk)
+        form = MembersForm(request.POST, request.FILES, instance=members)
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('committees')
+        except Exception as e:
+            print(str(e))
+        context = {'forms': form}
+        return render(request, self.template_name, context)
+
+class DeleteMemberView(LoginRequiredMixin, View):
+    login_url = '/login/'
+
+    def post(self, request, pk):
+        members = Committee_Member.objects.get(pk=pk)
+        try:
+            members.delete()
             return redirect('members')
-    context = {'forms': form}
-    return render(request, 'app/create_members.html', context)
-
-@login_required(login_url='login')
-def show_members(request):
-    members = Committee_Member.objects.all()
-    context = {'members': members}
-    return render(request, 'app/show_members.html', context)
-
-
-@login_required(login_url='login')
-def edit_member(request,pk):
-    members = Committee_Member.objects.get(pk=pk)
-    form = MembersForm(instance=members)
-    
-
-    if request.method == 'POST':
-        form = Committee_Member(request.POST, request.FILES,instance=members)
-        if form.is_valid():
-            form.save()
-            return redirect('committees')
-    context = {'forms': form}
-    return render(request, 'app/create_members.html', context)
-
-@login_required(login_url='login')
-def delete_member(request,pk):
-    members = Committee_Member.objects.get(pk=pk)
-
-    if request.method == 'POST':
-        members.delete()
+        except Exception as e:
+            print(str(e))
         return redirect('members')
-    return redirect('members')
 
 # 
 # =================================================================
-# ============  CREATING UNIONS ==============================
-@login_required(login_url='login')
-def show_unions(request):
-    this_year = str(datetime.now().year)
-    unions = Union.objects.all()
+# ============  CREATING UNION ==============================
 
-    # if you need unions and its executives for only a particular year, 
-    # use the lines below instead of the one on top
-    # 
-    # unions = Union.objects.filter(academic_year=this_year)
-
-    context = {'unions': unions,'this_year':this_year}
-    return render(request, 'app/show_unions.html', context)
-
-
-@login_required(login_url='login')
-def create_union(request):
-    form = UnionsForm()
-
-    if request.method == 'POST':
-        form = UnionsForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('unions')
-    context = {'forms': form}
-    return render(request, 'app/create_union.html', context)
-
-
-
-@login_required(login_url='login')
-def edit_union(request,pk):
-    unions = Union.objects.get(pk=pk)
-    form = UnionsForm(instance=unions)
+class ShowUnionsView(LoginRequiredMixin, View):
+    login_url = 'login'
     
-
-    if request.method == 'POST':
-        form = UnionsForm(request.POST, request.FILES,instance=unions)
-        if form.is_valid():
-            form.save()
+    def get(self, request):
+        try:
+            this_year = str(datetime.now().year)
+            unions = Union.objects.all()
+            # if you need unions and its executives for only a particular year, 
+            # use the lines below instead of the one on top
+            # 
+            # unions = Union.objects.filter(academic_year=this_year)
+            context = {'unions': unions,'this_year':this_year}
+            return render(request, 'app/show_unions.html', context)
+        except Exception:
             return redirect('unions')
-    context = {'forms': form}
-    return render(request, 'app/create_union.html', context)
 
-@login_required(login_url='login')
-def delete_union(request,pk):
-    unions = Union.objects.get(pk=pk)
+class CreateUnionView(LoginRequiredMixin, View):
+    login_url = 'login'
+    
+    def get(self, request):
+        form = UnionsForm()
+        context = {'forms': form}
+        return render(request, 'app/create_union.html', context)
+    
+    def post(self, request):
+        form = UnionsForm(request.POST, request.FILES)
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('unions')
+        except Exception:
+            return redirect('create_union')
+        context = {'forms': form}
+        return render(request, 'app/create_union.html', context)
 
-    if request.method == 'POST':
-        unions.delete()
+
+class EditUnionView(LoginRequiredMixin, View):
+    login_url = 'login'
+    
+    def get(self, request, pk):
+        unions = Union.objects.get(pk=pk)
+        form = UnionsForm(instance=unions)
+        context = {'forms': form}
+        return render(request, 'app/create_union.html', context)
+    
+    def post(self, request, pk):
+        unions = Union.objects.get(pk=pk)
+        form = UnionsForm(request.POST, request.FILES, instance=unions)
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('unions')
+        except Exception:
+            return redirect('edit_union', pk=pk)
+        context = {'forms': form}
+        return render(request, 'app/create_union.html', context)
+
+
+class DeleteUnionView(LoginRequiredMixin, View):
+    login_url = 'login'
+    
+    def post(self, request, pk):
+        try:
+            unions = Union.objects.get(pk=pk)
+            unions.delete()
+        except Exception:
+            pass
         return redirect('unions')
-    return redirect('unions')
+
 
 # 
 # =================================================================
 # ============  CREATING ZONES ==============================
-@login_required(login_url='login')
-def show_zones(request):
-    zones = Zone.objects.all()
-    context = {'zones': zones}
-    return render(request, 'app/show_zones.html', context)
+
+class ShowZonesView(LoginRequiredMixin, View):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+
+    def get(self, request):
+        try:
+            zones = Zone.objects.all()
+        except Zone.DoesNotExist:
+            zones = None
+        context = {'zones': zones}
+        return render(request, 'app/show_zones.html', context)
 
 
-@login_required(login_url='login')
-def create_zone(request):
-    form = ZoneForm()
+class CreateZoneView(LoginRequiredMixin, View):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
 
-    if request.method == 'POST':
+    def get(self, request):
+        form = ZoneForm()
+        context = {'forms': form}
+        return render(request, 'app/create_zone.html', context)
+
+    def post(self, request):
         form = ZoneForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('zones')
-    context = {'forms': form}
-    return render(request, 'app/create_zone.html', context)
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('zones')
+        except Exception:
+            pass
+        context = {'forms': form}
+        return render(request, 'app/create_zone.html', context)
 
 
-@login_required(login_url='login')
-def edit_zone(request,pk):
-    zones = Zone.objects.get(pk=pk)
-    form = ZoneForm(instance=zones)
-    
+class EditZoneView(LoginRequiredMixin, View):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
 
-    if request.method == 'POST':
-        form = ZoneForm(request.POST, request.FILES,instance=zones)
-        if form.is_valid():
-            form.save()
-            return redirect('zones')
-    context = {'forms': form}
-    return render(request, 'app/create_zone.html', context)
+    def get(self, request, pk):
+        zones = Zone.objects.get(pk=pk)
+        form = ZoneForm(instance=zones)
+        context = {'forms': form}
+        return render(request, 'app/create_zone.html', context)
+
+    def post(self, request, pk):
+        zones = Zone.objects.get(pk=pk)
+        form = ZoneForm(request.POST, request.FILES, instance=zones)
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('zones')
+        except Exception:
+            pass
+        context = {'forms': form}
+        return render(request, 'app/create_zone.html', context)
 
 
-@login_required(login_url='login')
-def delete_zone(request,pk):
-    zones = Zone.objects.get(pk=pk)
+class DeleteZoneView(LoginRequiredMixin, View):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
 
-    if request.method == 'POST':
-        zones.delete()
+    def post(self, request, pk):
+        zones = Zone.objects.get(pk=pk)
+        try:
+            zones.delete()
+        except Exception:
+            pass
         return redirect('zones')
-    return redirect('zones')
 
 
 
@@ -352,103 +499,149 @@ def delete_zone(request,pk):
 
 # =================================================================
 # ============  CREATING fellowship ==============================
-@login_required(login_url='login')
-def show_fellowships(request):
-    query = request.GET.get('q') or ''
-    if query == '':
-        fellowships = Fellowship.objects.all()
-    else:
-        fellowships = Fellowship.objects.filter(fellowship_type=query)
-    
-    context = {'fellowships': fellowships}
-    return render(request, 'app/show_fellowships.html', context)
 
-@login_required(login_url='login')
-def create_fellowship(request):
-    form = FellowshipForm()
+class ShowFellowshipsView(LoginRequiredMixin, View):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
 
-    if request.method == 'POST':
+    def get(self, request):
+        query = request.GET.get('q') or ''
+        try:
+            if query == '':
+                fellowships = Fellowship.objects.all()
+            else:
+                fellowships = Fellowship.objects.filter(fellowship_type=query)
+        except Fellowship.DoesNotExist:
+            fellowships = None
+        context = {'fellowships': fellowships}
+        return render(request, 'app/show_fellowships.html', context)
+
+
+class CreateFellowshipView(LoginRequiredMixin, View):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+
+    def get(self, request):
+        form = FellowshipForm()
+        context = {'forms': form}
+        return render(request, 'app/create_fellowship.html', context)
+
+    def post(self, request):
         form = FellowshipForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('fellowships')
-    context = {'forms': form}
-    return render(request, 'app/create_fellowship.html', context)
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('fellowships')
+        except Exception:
+            pass
+        context = {'forms': form}
+        return render(request, 'app/create_fellowship.html', context)
 
 
-@login_required(login_url='login')
-def edit_fellowship(request,pk):
-    fellowship = Fellowship.objects.get(pk=pk)
-    form = FellowshipForm(instance=fellowship)
-    
+class EditFellowshipView(LoginRequiredMixin, View):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
 
-    if request.method == 'POST':
-        form = FellowshipForm(request.POST, request.FILES,instance=fellowship)
-        if form.is_valid():
-            form.save()
-            return redirect('fellowships')
-    context = {'forms': form}
-    return render(request, 'app/create_fellowship.html', context)
+    def get(self, request, pk):
+        fellowship = Fellowship.objects.get(pk=pk)
+        form = FellowshipForm(instance=fellowship)
+        context = {'forms': form}
+        return render(request, 'app/create_fellowship.html', context)
+
+    def post(self, request, pk):
+        fellowship = Fellowship.objects.get(pk=pk)
+        form = FellowshipForm(request.POST, request.FILES, instance=fellowship)
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('fellowships')
+        except Exception:
+            pass
+        context = {'forms': form}
+        return render(request, 'app/create_fellowship.html', context)
 
 
-@login_required(login_url='login')
-def delete_fellowship(request,pk):
-    fellowship = Fellowship.objects.get(pk=pk)
+class DeleteFellowshipView(LoginRequiredMixin, View):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
 
-    if request.method == 'POST':
-        fellowship.delete()
+    def post(self, request, pk):
+        fellowship = Fellowship.objects.get(pk=pk)
+        try:
+            fellowship.delete()
+        except Exception:
+            pass
         return redirect('fellowships')
-    return redirect('fellowships')
-
-
 
 # 
 # =================================================================
 # ============  CREATING POSITIONS ==============================
-@login_required(login_url='login')
-def show_positions(request):
-    positions = Position.objects.all()
-    context = {'positions': positions}
-    return render(request, 'app/show_position.html', context)
 
 
-@login_required(login_url='login')
-def create_position(request):
-    form = PositionsForm()
+class ShowPositionView(LoginRequiredMixin, View):
+    login_url = 'login'
 
-    if request.method == 'POST':
+    def get(self, request):
+        try:
+           positions = Position.objects.all()
+        except Zone.DoesNotExist:
+            zones = None
+        context = {'zones': zones}
+        return render(request, 'app/show_position.html', context)
+
+
+class CreatePositionView(LoginRequiredMixin, View):
+    login_url = 'login'
+
+    def get(self, request):
+        form = PositionsForm()
+        context = {'forms': form}
+        return render(request, 'app/create_position.html', context)
+
+    def post(self, request):
         form = PositionsForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('positions')
-    context = {'forms': form}
-    return render(request, 'app/create_position.html', context)
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('positions')
+        except Exception:
+            pass
+        context = {'forms': form}
+        return render(request, 'app/create_position.html', context)
 
 
-@login_required(login_url='login')
-def edit_position(request,pk):
-    positions = Position.objects.get(pk=pk)
-    form = PositionsForm(instance=positions)
+class EditPositionView(LoginRequiredMixin, View):
+    login_url = 'login'
+
+    def get(self, request, pk):
+        positions = Position.objects.get(pk=pk)
+        form = PositionsForm(instance=positions)
+        context = {'forms': form}
+        return render(request, 'app/create_position.html', context)
+
+    def post(self, request, pk):
+        positions = Position.objects.get(pk=pk)
+        form = PositionsForm(request.POST, request.FILES, instance=positions)
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('positions')
+        except Exception:
+            pass
+        context = {'forms': form}
+        return render(request, 'app/create_position.html', context)
     
 
-    if request.method == 'POST':
-        form = PositionsForm(request.POST, request.FILES,instance=positions)
-        if form.is_valid():
-            form.save()
-            return redirect('positions')
-    context = {'forms': form}
-    return render(request, 'app/create_position.html', context)
+class DeletePositionView(LoginRequiredMixin, View):
+    login_url = 'login'
 
-
-@login_required(login_url='login')
-def delete_position(request,pk):
-    positions = Position.objects.get(pk=pk)
-
-    if request.method == 'POST':
-        positions.delete()
+    def post(self, request, pk):
+        positions = Position.objects.get(pk=pk)
+        try:
+            positions.delete()
+        except Exception:
+            pass
         return redirect('positions')
-    return redirect('positions')
-
 # # =================ZONE NAMES START==================
 # @login_required(login_url='login')
 # def show_zone_names(request):

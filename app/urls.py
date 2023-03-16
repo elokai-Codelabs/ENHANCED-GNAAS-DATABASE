@@ -6,51 +6,51 @@ from .import excel_to_db
 
 
 urlpatterns = [
-    path('', views.loginUser, name='login'),
+    path('', views.LoginView.as_view(), name='login'),
 
-    path('dashboard/',views.index, name='index' ),
+    path('dashboard/',views.IndexView.as_view(), name='index' ),
     # Uers authentication
-    path('logout/', views.logoutUser, name='logout'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
 
     # executive routes
-    path('executives/', views.show_executive, name='executives'),
-    path('create-executive/', views.create_executive, name='create-executive'),
-    path('edit-executive/<str:pk>/', views.edit_executive, name='edit-executive'),
-    path('delete-executive/<str:pk>/', views.delete_executive, name='delete-executive'),
+    path('executives/', views.ShowExecutiveView.as_view(), name='executives'),
+    path('create-executive/', views.CreateExecutiveView.as_view(), name='create-executive'),
+    path('edit-executive/<str:pk>/', views.EditExecutiveView.as_view(), name='edit-executive'),
+    path('delete-executive/<str:pk>/', views.DeleteExecutiveView.as_view(), name='delete-executive'),
 # commitee
-    path('committees/', views.show_committee, name='committees'),
-    path('create-committee/', views.create_committee, name='create-committee'),
-    path('edit-committee/<str:pk>/', views.edit_committee, name='edit-committee'),
-    path('delete-committee/<str:pk>/', views.delete_committee, name='delete-committee'),
+    path('committees/', views.ShowCommitteeView.as_view(), name='committees'),
+    path('create-committee/', views.CreateCommitteeView.as_view(), name='create-committee'),
+    path('edit-committee/<str:pk>/', views.EditCommitteeView.as_view(), name='edit-committee'),
+    path('delete-committee/<str:pk>/', views.DeleteExecutiveView.as_view(), name='delete-committee'),
 # committee members
-    path('members/', views.show_members, name='members'),
-    path('create-member/', views.create_member, name='create-member'),
-    path('edit-member/<str:pk>/', views.edit_member, name='edit-member'),
-    path('delete-member/<str:pk>/', views.delete_member, name='delete-member'),
+    path('members/', views.ShowMembersView.as_view(), name='members'),
+    path('create-member/', views.CreateMemberView.as_view(), name='create-member'),
+    path('edit-member/<str:pk>/', views.EditMemberView.as_view(), name='edit-member'),
+    path('delete-member/<str:pk>/', views.DeleteMemberView.as_view(), name='delete-member'),
 
     # union routes
-    path('unions/', views.show_unions, name='unions'),
-    path('create-union/',views.create_union, name='create-union'),
-    path('edit-union/<str:pk>/',views.edit_union, name='edit-union'),
-    path('delete-union/<str:pk>/',views.delete_union, name='delete-union'),
+    path('unions/', views.ShowUnionsView.as_view(), name='unions'),
+    path('create-union/',views.CreateUnionView.as_view(), name='create-union'),
+    path('edit-union/<str:pk>/',views.EditUnionView.as_view(), name='edit-union'),
+    path('delete-union/<str:pk>/',views.DeleteUnionView.as_view(), name='delete-union'),
 
     # ZONES routes
-    path('zones/', views.show_zones, name='zones'),
-    path('create-zone/',views.create_zone, name='create-zone'),
-    path('edit-zone/<str:pk>/',views.edit_zone, name='edit-zone'),
-    path('delete-zone/<str:pk>/',views.delete_zone, name='delete-zone'),
+    path('zones/', views.ShowZonesView.as_view(), name='zones'),
+    path('create-zone/',views.CreateZoneView.as_view(), name='create-zone'),
+    path('edit-zone/<str:pk>/',views.EditZoneView.as_view(), name='edit-zone'),
+    path('delete-zone/<str:pk>/',views.DeleteZoneView.as_view(), name='delete-zone'),
 
      # fellowship routes
-    path('fellowships/', views.show_fellowships, name='fellowships'),
-    path('create-fellowship/',views.create_fellowship, name='create-fellowship'),
-    path('edit-fellowship/<str:pk>/',views.edit_fellowship, name='edit-fellowship'),
-    path('delete-fellowship/<str:pk>/',views.delete_fellowship, name='delete-fellowship'),
+    path('fellowships/', views.ShowFellowshipsView.as_view(), name='fellowships'),
+    path('create-fellowship/',views.CreateFellowshipView.as_view(), name='create-fellowship'),
+    path('edit-fellowship/<str:pk>/',views.EditFellowshipView.as_view(), name='edit-fellowship'),
+    path('delete-fellowship/<str:pk>/',views.DeleteFellowshipView.as_view(), name='delete-fellowship'),
 
 # positions routes
-    path('positions/', views.show_positions, name='positions'),
-    path('create-position/', views.create_position, name='create-position'),
-    path('edit-position/<str:pk>/', views.edit_position, name='edit-position'),
-    path('delete-position/<str:pk>/', views.delete_position, name='delete-position'),
+    path('positions/', views.ShowPositionView.as_view(), name='positions'),
+    path('create-position/', views.CreatePositionView.as_view(), name='create-position'),
+    path('edit-position/<str:pk>/', views.EditPositionView.as_view(), name='edit-position'),
+    path('delete-position/<str:pk>/', views.DeletePositionView.as_view(), name='delete-position'),
 
 # Chaplain routes
     path('chaplains/', views.show_chaplains, name='chaplains'),

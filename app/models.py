@@ -3,6 +3,10 @@ from django.db import models
 import uuid
 from gnaasDatabase.utils.constants import Leadership
 
+# import constants
+from .constants import ZONE_NAMES, UNION_NAME,LEADERSHIP_LEVEL,FELLOWSHIP_TYPE,get_years
+
+
 # EXECUTIVE TABLE
 class Executive(models.Model):
     def get_years() -> tuple:
@@ -38,12 +42,6 @@ class Executive(models.Model):
     def __str__(self):
         return self.full_name
 
-
-
-
-    def __str__(self):
-        self.name = self.name.upper()
-        return self.name
 
 class Position(models.Model):
     position = models.CharField(max_length=100)
@@ -361,7 +359,7 @@ class Alumni_rep(models.Model):
 
 
 class Program(models.Model):
-    PROGRAM_LEVEL = (
+    LEADERSHIP_LEVEL = (
        ('National', 'National'),
         ('Union','Union'),
         ('Zone','Zone'),
@@ -378,7 +376,7 @@ class Program(models.Model):
     date = models.DateField(auto_now_add=True)
     description = models.TextField(max_length=300,null=True, blank=True)
     cost = models.FloatField(max_length=40)
-    program_level =models.CharField(max_length=100, choices=PROGRAM_LEVEL)
+    program_level =models.CharField(max_length=100, choices=LEADERSHIP_LEVEL)
     def __str__(self):
             return self.name
 
